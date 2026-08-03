@@ -6,6 +6,7 @@ import { VARIANTS, type VariantName } from './variants'
 const ALL_NAMES = VARIANTS.map((v) => v.name)
 
 export function Demo() {
+  const [copied, setCopied] = useState(false)
   const [writeText, setWriteText] = useState('HELLO')
   const [size, setSize] = useState(32)
   const [speed, setSpeed] = useState(90)
@@ -37,9 +38,38 @@ export function Demo() {
     <div style={{ fontFamily: 'monospace', padding: '2rem', maxWidth: 1100, margin: '0 auto' }}>
       <header style={{ marginBottom: '1.5rem' }}>
         <h1 style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>sprite-lite</h1>
-        <p style={{ color: '#888' }}>
+        <p style={{ color: '#888', marginBottom: '0.75rem' }}>
           Zero-dependency 8×8 pixel-art animation component for React.
         </p>
+        <button
+          onClick={() => {
+            navigator.clipboard.writeText('npm i sprite-lite')
+            setCopied(true)
+            setTimeout(() => setCopied(false), 2000)
+          }}
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '0.6rem',
+            background: '#111',
+            border: '1px solid #333',
+            borderRadius: 6,
+            padding: '0.4rem 0.8rem',
+            color: '#e0e0e0',
+            fontFamily: 'monospace',
+            fontSize: '0.9rem',
+            cursor: 'pointer',
+            transition: 'border-color 0.15s',
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.borderColor = '#555')}
+          onMouseLeave={(e) => (e.currentTarget.style.borderColor = '#333')}
+        >
+          <span style={{ color: '#00ff88' }}>$</span>
+          <span>npm i sprite-lite</span>
+          <span style={{ color: '#555', fontSize: '0.75rem', marginLeft: 4 }}>
+            {copied ? '✓ copied' : 'copy'}
+          </span>
+        </button>
       </header>
 
       <div style={{ display: 'flex', alignItems: 'flex-start', gap: '2rem' }}>
