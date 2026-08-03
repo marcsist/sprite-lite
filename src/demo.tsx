@@ -136,7 +136,7 @@ export function Demo() {
             </span>
           </button>
           <a
-            href="https://github.com/marcsist/sprite-light"
+            href="https://github.com/marcsist/sprite-lite"
             target="_blank"
             rel="noreferrer"
             style={{
