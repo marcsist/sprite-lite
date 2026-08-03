@@ -5,9 +5,13 @@ import dts from 'vite-plugin-dts'
 export default defineConfig({
   plugins: [
     react(),
-    dts({ insertTypesEntry: true }),
+    dts({
+      insertTypesEntry: true,
+      include: ['src/index.ts', 'src/ThinkingSprite.tsx', 'src/WriteSprite.tsx', 'src/variants.ts'],
+    }),
   ],
   build: {
+    copyPublicDir: false,
     lib: {
       entry: 'src/index.ts',
       name: 'ThinkingSprite',
