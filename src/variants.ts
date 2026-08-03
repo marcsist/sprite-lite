@@ -7,7 +7,10 @@ export type VariantName =
   | 'Breath' | 'Drip' | 'Bubble'
   | 'Hourglass' | 'Ripple' | 'Tide' | 'Signal' | 'Focus'
   | 'Campfire' | 'Firefly' | 'Bloom' | 'Flutter' | 'Aurora' | 'Surf'
-  | 'Invader' | 'Pac' | 'Pong' | 'Neko' | 'Worm' | 'Face'
+  | 'Invader' | 'Pac' | 'Pong' | 'Neko' | 'Worm' | 'Face' | 'TabulaRasa'
+  | 'Tamagotchi'
+  | 'Cursor' | 'Arc' | 'Neural' | 'Think' | 'Loader' | 'Radar'
+  | 'Wave' | 'Cog' | 'VoiceWaveform' | 'Clock' | 'Step' | 'Fill' | 'Grow'
 
 const cl = (v: number) => Math.min(7, Math.max(0, v))
 
@@ -673,6 +676,281 @@ function renderFace(tick: number): Pixels {
   return pixels
 }
 
+// ── TabulaRasa: placeholder-text lines, sweep clean, repeat ──────────────
+function renderTabulaRasa(tick: number): Pixels {
+  // Every other row active; each row has word-like dash groups with gaps.
+  // Rows 0,2,4,6 only — rows 1,3,5,7 stay blank (breathing room).
+  const CONTENT: [number, number][] = [
+    // row 0: short word · long word
+    [0,0],[1,0],[2,0],           [4,0],[5,0],[6,0],[7,0],
+    // row 2: long word · short word
+    [0,2],[1,2],[2,2],[3,2],[4,2],     [6,2],[7,2],
+    // row 4: short word · medium word
+    [0,4],[1,4],       [3,4],[4,4],[5,4],[6,4],
+    // row 6: medium word · medium word
+    [0,6],[1,6],[2,6],[3,6],     [5,6],[6,6],[7,6],
+  ]
+
+  const WRITE = CONTENT.length  // one pixel per tick
+  const HOLD  = 10
+  const WIPE  = 16
+  const CYCLE = WRITE + HOLD + WIPE
+
+  const t   = tick % CYCLE
+  const dir = Math.floor(tick / CYCLE) % 4  // 0=L→R 1=R→L 2=T→B 3=B→T
+
+  if (t < WRITE) {
+    return CONTENT.slice(0, t + 1)
+  } else if (t < WRITE + HOLD) {
+    return [...CONTENT]
+  } else {
+    const edge = Math.floor(((t - WRITE - HOLD) + 1) / WIPE * 8)
+    return CONTENT.filter(([x, y]) =>
+      dir === 0 ? x >= edge
+    : dir === 1 ? x < 8 - edge
+    : dir === 2 ? y >= edge
+    :             y < 8 - edge
+    )
+  }
+}
+
+// ── Tamagotchi: round pixel pet drifting side-to-side, blinking, walking ──
+const TAMA_BODY: Pixels = [
+  [3,0],                                 // hair tuft
+  [2,1],[3,1],[4,1],                     // head top
+  [1,2],[2,2],[3,2],[4,2],[5,2],         // head widest
+  [1,3],[5,3],                           // face sides (eye dots at [2,3],[4,3] added separately)
+  [1,4],[5,4],                           // face sides lower (mouth dot at [3,4] added separately)
+  [2,5],[3,5],[4,5],                     // chin
+  [3,6],[4,6],                           // body stub
+]
+function renderTamagotchi(tick: number): Pixels {
+  // side-to-side drift: dx 0..2 via sine, ~5.7 s per cycle
+  const dx = Math.round(1 + Math.sin((tick / 32) * Math.PI * 2))
+  // walking feet: alternate wide/narrow every 8 ticks
+  const foot = Math.floor(tick / 8) % 2
+  // blink: 2-tick window every 40 ticks
+  const blink = tick % 40 < 2
+  // happy grin: last phase of a 4-phase 40-tick cycle
+  const happy = Math.floor(tick / 40) % 4 === 3
+
+  const pixels: Pixels = TAMA_BODY.map(([x, y]) => [cl(x + dx), y])
+
+  // eyes (open = lit dots; blink = leave dark)
+  if (!blink) pixels.push([cl(2 + dx), 3], [cl(4 + dx), 3])
+
+  // mouth (neutral = single dot; happy = wide grin)
+  if (happy) {
+    pixels.push([cl(2 + dx), 4], [cl(3 + dx), 4], [cl(4 + dx), 4])
+  } else {
+    pixels.push([cl(3 + dx), 4])
+  }
+
+  // feet
+  if (foot === 0) {
+    pixels.push([cl(2 + dx), 7], [cl(5 + dx), 7])   // wide stance
+  } else {
+    pixels.push([cl(3 + dx), 7], [cl(4 + dx), 7])   // narrow stance
+  }
+
+  return pixels
+}
+
+// ── Cursor: blinking I-beam text cursor ──────────────────────────────────
+function renderCursor(tick: number): Pixels {
+  if ((tick % 16) >= 10) return []
+  return [
+    [2,1],[3,1],[4,1],
+    [3,2],[3,3],[3,4],[3,5],
+    [2,6],[3,6],[4,6],
+  ]
+}
+
+// ── Arc: spinning 3-pixel arc on an 8-point circle — modern loading spinner ─
+const ARC_PATH: Pixels = [[3,0],[5,1],[6,3],[5,5],[3,6],[1,5],[0,3],[1,1]]
+function renderArc(tick: number): Pixels {
+  const n = ARC_PATH.length
+  const head = Math.floor(tick / 2) % n
+  return [0,1,2].map(i => ARC_PATH[(head + i) % n])
+}
+
+// ── Neural: three-node network with a 2-pixel pulse cycling the edges ─────
+const NEURAL_NODES: Pixels = [[3,1],[1,6],[6,6]]
+const NEURAL_EDGES: Pixels[] = [
+  [[2,2],[2,3],[1,4],[1,5]],   // A→B
+  [[2,6],[3,6],[4,6],[5,6]],   // B→C
+  [[6,5],[5,4],[5,3],[4,2]],   // C→A
+]
+function renderNeural(tick: number): Pixels {
+  const pixels: Pixels = [...NEURAL_NODES]
+  const period = 7
+  const t = tick % (NEURAL_EDGES.length * period)
+  const edgeIdx = Math.floor(t / period)
+  const pos = t % period
+  const edge = NEURAL_EDGES[edgeIdx]
+  if (pos < edge.length) {
+    pixels.push(edge[pos])
+    if (pos > 0) pixels.push(edge[pos - 1])
+  }
+  return pixels
+}
+
+// ── Think: question mark draws in, holds, morphs into exclamation mark ────
+function renderThink(tick: number): Pixels {
+  const cycle = 56
+  const t = tick % cycle
+  if (t < 16) {
+    const p: Pixels = []
+    if (t >= 0)  p.push([3,1],[4,1])
+    if (t >= 4)  p.push([2,2],[5,2])
+    if (t >= 8)  p.push([4,3],[5,3])
+    if (t >= 11) p.push([3,4])
+    if (t >= 14) p.push([3,6])
+    return p
+  }
+  if (t < 28) return [[3,1],[4,1],[2,2],[5,2],[4,3],[5,3],[3,4],[3,6]]
+  if (t < 38) {
+    const age = t - 28
+    const p: Pixels = [[3,1],[3,4],[3,6]]
+    if (age < 5)  p.push([4,1],[2,2],[5,2],[4,3],[5,3])
+    if (age >= 3) p.push([3,2],[3,3])
+    return p
+  }
+  if (t < 50) {
+    const p: Pixels = [[3,1],[3,2],[3,3],[3,4]]
+    if ((t % 8) < 6) p.push([3,6])
+    return p
+  }
+  return t < 54 ? [[3,1],[3,2],[3,3],[3,4],[3,6]] : []
+}
+
+// ── Loader: left-to-right progress bar fill, hold, reset ─────────────────
+function renderLoader(tick: number): Pixels {
+  const fill = 36, hold = 8, gap = 8
+  const t = tick % (fill + hold + gap)
+  if (t >= fill + hold) return []
+  const filled = t < fill ? Math.round((t / fill) * 8) : 8
+  const pixels: Pixels = []
+  for (let x = 0; x < filled; x++) pixels.push([x,3],[x,4])
+  return pixels
+}
+
+// ── Radar: boundary ring + rotating sweep arm radiating from centre ───────
+const RADAR_RING: Pixels = [[3,0],[5,1],[6,3],[5,5],[3,6],[1,5],[0,3],[1,1]]
+const RADAR_ARMS: Pixels[] = [
+  [[3,2],[3,1]],  // N
+  [[4,2]],        // NE
+  [[4,3],[5,3]],  // E
+  [[4,4]],        // SE
+  [[3,4],[3,5]],  // S
+  [[2,4]],        // SW
+  [[2,3],[1,3]],  // W
+  [[2,2]],        // NW
+]
+function renderRadar(tick: number): Pixels {
+  const dir = Math.floor(tick / 3) % 8
+  return [[3,3], ...RADAR_RING, ...RADAR_ARMS[dir]]
+}
+
+// ── Wave: three dots with staggered sinusoidal bounce — chat typing indicator
+function renderWave(tick: number): Pixels {
+  const cycle = 18
+  return ([1, 3, 5] as number[]).map((x, i) => {
+    const t = (tick - i * 6 + cycle * 10) % cycle
+    const phase = (t / cycle) * Math.PI * 2
+    const y = cl(5 - Math.round(Math.max(0, Math.sin(phase)) * 2))
+    return [x, y] as [number, number]
+  })
+}
+
+// ── Cog: 4-tooth gear alternating between + and × tooth positions ─────────
+const COG_BODY: Pixels = [
+  [2,2],[3,2],[4,2],[5,2],
+  [2,3],[5,3],
+  [2,4],[5,4],
+  [2,5],[3,5],[4,5],[5,5],
+  [3,3],[4,3],[3,4],[4,4],
+]
+const COG_TEETH: Pixels[] = [
+  [[3,0],[4,0],[7,3],[7,4],[3,7],[4,7],[0,3],[0,4]],  // N/E/S/W
+  [[6,0],[7,1],[6,7],[7,6],[0,6],[1,7],[0,1],[1,0]],  // NE/SE/SW/NW
+]
+function renderCog(tick: number): Pixels {
+  return [...COG_BODY, ...COG_TEETH[Math.floor(tick / 3) % 2]]
+}
+
+// ── VoiceWaveform: thin alternating lines of varying height from center ──
+function renderVoiceWaveform(tick: number): Pixels {
+  const pixels: Pixels = []
+  const t = (tick / 16) * Math.PI * 2
+  for (let x = 0; x < 8; x++) {
+    const phase = (x * Math.PI * 2) / 8
+    const raw = Math.sin(t + phase) * 0.55
+              + Math.sin(t * 1.6 + phase * 1.4) * 0.30
+              + Math.sin(t * 2.5 + phase * 0.8) * 0.15
+    const h = Math.max(0, Math.min(3, Math.round((raw + 1) * 1.75)))
+    pixels.push([x, 3 - h])
+    pixels.push([x, 4 + h])
+  }
+  return pixels
+}
+
+// ── Clock: ring face with minute hand (fast) and hour hand (slow) ─────────
+const CLOCK_RING: Pixels = [[3,0],[5,1],[6,3],[5,5],[3,6],[1,5],[0,3],[1,1]]
+const CLOCK_HANDS: Pixels[] = [
+  [[3,2],[3,1]],  // N
+  [[4,2],[5,1]],  // NE
+  [[4,3],[5,3]],  // E
+  [[4,4],[5,5]],  // SE
+  [[3,4],[3,5]],  // S
+  [[2,4],[1,5]],  // SW
+  [[2,3],[1,3]],  // W
+  [[2,2],[1,1]],  // NW
+]
+function renderClock(tick: number): Pixels {
+  const minuteDir = Math.floor(tick / 6) % 8
+  const hourDir = Math.floor(tick / 48) % 8
+  return [[3,3], ...CLOCK_RING, ...CLOCK_HANDS[minuteDir], CLOCK_HANDS[hourDir][0]]
+}
+
+// ── Step: three dots fill left-to-right then drain left-to-right ──────────
+function renderStep(tick: number): Pixels {
+  const cycle = 24
+  const t = tick % cycle
+  const dots: Pixels = [[2,4],[4,4],[6,4]]
+  const pixels: Pixels = []
+  if (t < 9) {
+    const n = Math.floor(t / 3) + 1
+    for (let i = 0; i < Math.min(n, 3); i++) pixels.push(dots[i])
+  } else if (t < 18) {
+    const gone = Math.floor((t - 9) / 3) + 1
+    for (let i = gone; i < 3; i++) pixels.push(dots[i])
+  }
+  return pixels
+}
+
+// ── Fill: 8-point ring fills clockwise, holds complete, then resets ───────
+const FILL_RING: Pixels = [[3,0],[5,1],[6,3],[5,5],[3,6],[1,5],[0,3],[1,1]]
+function renderFill(tick: number): Pixels {
+  const cycle = 32
+  const t = tick % cycle
+  if (t >= 28) return []
+  if (t >= 24) return [...FILL_RING]
+  return FILL_RING.slice(0, Math.floor(t / 3))
+}
+
+// ── Grow: three columns grow from bottom to different heights, hold, reset ─
+function renderGrow(tick: number): Pixels {
+  const cycle = 32
+  const t = tick % cycle
+  const pixels: Pixels = []
+  for (const [col, maxH] of [[2,5],[4,7],[6,4]] as [number,number][]) {
+    const h = t < 20 ? Math.round((t / 20) * maxH) : t < 28 ? maxH : 0
+    for (let dy = 0; dy < h; dy++) pixels.push([col, 7 - dy])
+  }
+  return pixels
+}
+
 // ── Variant registry ──────────────────────────────────────────────────────
 export const VARIANTS: Array<{ name: VariantName; render: (tick: number) => Pixels }> = [
   { name: 'EKG',      render: renderEkg      },
@@ -715,5 +993,20 @@ export const VARIANTS: Array<{ name: VariantName; render: (tick: number) => Pixe
   { name: 'Pong',     render: renderPong     },
   { name: 'Neko',     render: renderNeko     },
   { name: 'Worm',     render: renderWorm     },
-  { name: 'Face',     render: renderFace     },
+  { name: 'Face',       render: renderFace       },
+  { name: 'TabulaRasa',  render: renderTabulaRasa  },
+  { name: 'Tamagotchi', render: renderTamagotchi },
+  { name: 'Cursor', render: renderCursor },
+  { name: 'Arc',    render: renderArc    },
+  { name: 'Neural', render: renderNeural },
+  { name: 'Think',  render: renderThink  },
+  { name: 'Loader', render: renderLoader },
+  { name: 'Radar',  render: renderRadar  },
+  { name: 'Wave',   render: renderWave   },
+  { name: 'Cog',    render: renderCog    },
+  { name: 'VoiceWaveform', render: renderVoiceWaveform },
+  { name: 'Clock',  render: renderClock  },
+  { name: 'Step',   render: renderStep   },
+  { name: 'Fill',   render: renderFill   },
+  { name: 'Grow',   render: renderGrow   },
 ]
