@@ -5,8 +5,47 @@ import { VARIANTS, type VariantName } from './variants'
 
 const ALL_NAMES = VARIANTS.map((v) => v.name)
 
+const THINKING_DEFAULTS: Record<string, unknown> = {
+  size: 16,
+  active: true,
+  speed: 90,
+  shape: 'square',
+  dotRadius: 0.38,
+}
+
+const WRITE_DEFAULTS: Record<string, unknown> = {
+  text: 'HELLO',
+  size: 16,
+  speed: 90,
+  active: true,
+  shape: 'square',
+  dotRadius: 0.38,
+}
+
+function formatSnippet(
+  componentName: string,
+  props: Record<string, unknown>,
+  defaults: Record<string, unknown>
+): string {
+  const lines: string[] = []
+  for (const [key, value] of Object.entries(props)) {
+    if (value === undefined) continue
+    if (key in defaults && JSON.stringify(value) === JSON.stringify(defaults[key])) continue
+    lines.push(typeof value === 'string' ? `  ${key}="${value}"` : `  ${key}={${JSON.stringify(value)}}`)
+  }
+  return lines.length === 0 ? `<${componentName} />` : `<${componentName}\n${lines.join('\n')}\n/>`
+}
+
+function copyWithFeedback(text: string, setCopied: (v: boolean) => void) {
+  navigator.clipboard.writeText(text)
+  setCopied(true)
+  setTimeout(() => setCopied(false), 2000)
+}
+
 export function Demo() {
   const [copied, setCopied] = useState(false)
+  const [copiedThinking, setCopiedThinking] = useState(false)
+  const [copiedWrite, setCopiedWrite] = useState(false)
   const [writeText, setWriteText] = useState('HELLO')
   const [size, setSize] = useState(32)
   const [speed, setSpeed] = useState(90)
@@ -26,6 +65,35 @@ export function Demo() {
   const subsetArray: VariantName[] | undefined =
     selectedSubset.size > 0 ? [...selectedSubset] : undefined
 
+  const thinkingSnippet = formatSnippet(
+    'ThinkingSprite',
+    {
+      size,
+      speed,
+      active,
+      color,
+      variant: lockedVariant,
+      variants: subsetArray,
+      shape: dotMode ? 'dot' : 'square',
+      dotRadius,
+    },
+    THINKING_DEFAULTS
+  )
+
+  const writeSnippet = formatSnippet(
+    'WriteSprite',
+    {
+      text: writeText,
+      size,
+      speed,
+      active,
+      color,
+      shape: dotMode ? 'dot' : 'square',
+      dotRadius,
+    },
+    WRITE_DEFAULTS
+  )
+
   function toggleSubset(name: VariantName) {
     setSelectedSubset((prev) => {
       const next = new Set(prev)
@@ -41,35 +109,48 @@ export function Demo() {
         <p style={{ color: '#888', marginBottom: '0.75rem' }}>
           Zero-dependency 8×8 pixel-art animation component for React.
         </p>
-        <button
-          onClick={() => {
-            navigator.clipboard.writeText('npm i sprite-lite')
-            setCopied(true)
-            setTimeout(() => setCopied(false), 2000)
-          }}
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '0.6rem',
-            background: '#111',
-            border: '1px solid #333',
-            borderRadius: 6,
-            padding: '0.4rem 0.8rem',
-            color: '#e0e0e0',
-            fontFamily: 'monospace',
-            fontSize: '0.9rem',
-            cursor: 'pointer',
-            transition: 'border-color 0.15s',
-          }}
-          onMouseEnter={(e) => (e.currentTarget.style.borderColor = '#555')}
-          onMouseLeave={(e) => (e.currentTarget.style.borderColor = '#333')}
-        >
-          <span style={{ color: '#00ff88' }}>$</span>
-          <span>npm i sprite-lite</span>
-          <span style={{ color: '#555', fontSize: '0.75rem', marginLeft: 4 }}>
-            {copied ? '✓ copied' : 'copy'}
-          </span>
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <button
+            onClick={() => copyWithFeedback('npm i sprite-lite', setCopied)}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.6rem',
+              background: '#111',
+              border: '1px solid #333',
+              borderRadius: 6,
+              padding: '0.4rem 0.8rem',
+              color: '#e0e0e0',
+              fontFamily: 'monospace',
+              fontSize: '0.9rem',
+              cursor: 'pointer',
+              transition: 'border-color 0.15s',
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.borderColor = '#555')}
+            onMouseLeave={(e) => (e.currentTarget.style.borderColor = '#333')}
+          >
+            <span style={{ color: '#00ff88' }}>$</span>
+            <span>npm i sprite-lite</span>
+            <span style={{ color: '#555', fontSize: '0.75rem', marginLeft: 4 }}>
+              {copied ? '✓ copied' : 'copy'}
+            </span>
+          </button>
+          <a
+            href="https://github.com/marcsist/sprite-light"
+            target="_blank"
+            rel="noreferrer"
+            style={{
+              color: '#555',
+              fontSize: '0.85rem',
+              textDecoration: 'none',
+              transition: 'color 0.15s',
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = '#aaa')}
+            onMouseLeave={(e) => (e.currentTarget.style.color = '#555')}
+          >
+            GitHub ↗
+          </a>
+        </div>
       </header>
 
       <div style={{ display: 'flex', alignItems: 'flex-start', gap: '2rem' }}>
@@ -144,6 +225,77 @@ export function Demo() {
                 {ALL_NAMES.map((n) => <option key={n} value={n}>{n}</option>)}
               </select>
             </label>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <span style={{
+                fontSize: '0.7rem',
+                textTransform: 'uppercase',
+                letterSpacing: '0.1em',
+                color: '#555',
+              }}>
+                Code
+              </span>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                <pre style={{
+                  background: '#1a1a1a',
+                  border: '1px solid #333',
+                  borderRadius: 4,
+                  padding: '8px 10px',
+                  fontSize: '0.7rem',
+                  overflowX: 'auto',
+                  margin: 0,
+                }}>
+                  {thinkingSnippet}
+                </pre>
+                <button
+                  onClick={() => copyWithFeedback(thinkingSnippet, setCopiedThinking)}
+                  style={{
+                    alignSelf: 'flex-start',
+                    background: 'none',
+                    border: '1px solid #333',
+                    borderRadius: 4,
+                    padding: '2px 8px',
+                    color: '#888',
+                    fontFamily: 'monospace',
+                    fontSize: '0.7rem',
+                    cursor: 'pointer',
+                  }}
+                >
+                  {copiedThinking ? '✓ copied' : 'copy'}
+                </button>
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                <pre style={{
+                  background: '#1a1a1a',
+                  border: '1px solid #333',
+                  borderRadius: 4,
+                  padding: '8px 10px',
+                  fontSize: '0.7rem',
+                  overflowX: 'auto',
+                  margin: 0,
+                }}>
+                  {writeSnippet}
+                </pre>
+                <button
+                  onClick={() => copyWithFeedback(writeSnippet, setCopiedWrite)}
+                  style={{
+                    alignSelf: 'flex-start',
+                    background: 'none',
+                    border: '1px solid #333',
+                    borderRadius: 4,
+                    padding: '2px 8px',
+                    color: '#888',
+                    fontFamily: 'monospace',
+                    fontSize: '0.7rem',
+                    cursor: 'pointer',
+                  }}
+                >
+                  {copiedWrite ? '✓ copied' : 'copy'}
+                </button>
+              </div>
+            </div>
           </section>
         </aside>
 
