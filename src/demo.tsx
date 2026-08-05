@@ -40,7 +40,7 @@ export function Demo() {
     <div className="demo-shell" style={{ fontFamily: 'monospace', padding: '2rem', maxWidth: 1100, margin: '0 auto' }}>
       <header style={{ marginBottom: '1.5rem' }}>
         <div className="brand-lockup">
-          <span className="brand-mark" aria-hidden="true"><ThinkingSprite variant="Face" size={22} speed={150} /></span>
+          <span className="brand-mark" aria-hidden="true"><ThinkingSprite variant="Ghost" size={22} speed={105} /></span>
           <h1 style={{ fontSize: '1.5rem' }}>sprite-light</h1>
         </div>
         <p style={{ color: '#888', marginTop: '0.65rem' }}>
@@ -270,7 +270,7 @@ export function Demo() {
               <div className="assistant-row" aria-live="polite">
                 <div className="sprite-avatar">
                   <ThinkingSprite
-                    variant="Face"
+                    variant={showcaseThinking ? 'Campfire' : 'Face'}
                     size={28}
                     speed={110}
                     shape="dot"
@@ -303,7 +303,7 @@ export function Demo() {
             <div className={`voice-window${voiceResponding ? ' is-responding' : ''}`} aria-live="polite">
               <div className="voice-avatar">
                 <ThinkingSprite
-                  variant="Ghost"
+                  variant={voiceResponding ? 'Bars' : 'Face'}
                   size={76}
                   speed={voiceResponding ? 60 : 280}
                   shape="square"
