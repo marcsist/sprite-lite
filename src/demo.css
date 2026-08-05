@@ -1,0 +1,175 @@
+.brand-lockup {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.brand-mark { color: #dfff55; }
+
+.examples {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid #222;
+}
+
+.examples > h2 {
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+.examples-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.example-card {
+  min-width: 0;
+  padding: 1rem;
+  border: 1px solid #252525;
+  border-radius: 12px;
+  background: #111;
+}
+
+.example-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.example-heading h3 { margin-bottom: 0.35rem; font-size: 0.9rem; }
+.example-heading p { color: #777; font-size: 0.72rem; line-height: 1.5; }
+.example-heading button {
+  padding: 0.35rem 0.6rem;
+  color: #bbb;
+  border: 1px solid #333;
+  border-radius: 5px;
+  background: transparent;
+  font: inherit;
+  font-size: 0.7rem;
+  cursor: pointer;
+}
+.example-heading button:hover { color: #fff; border-color: #555; }
+.example-heading button:focus-visible { outline: 2px solid #dfff55; outline-offset: 2px; }
+
+.chat-window {
+  height: 205px;
+  padding: 1.25rem;
+  color: #24251f;
+  border-radius: 8px;
+  background: #e8e7df;
+}
+
+.message-user {
+  width: fit-content;
+  max-width: 82%;
+  margin-left: auto;
+  padding: 0.65rem 0.8rem;
+  border-radius: 10px 10px 2px 10px;
+  background: #d2d1c9;
+  font-size: 0.75rem;
+}
+
+.assistant-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.4rem;
+}
+
+.sprite-avatar {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  flex: 0 0 40px;
+  border-radius: 8px;
+  background: #202219;
+  box-shadow: inset 0 0 0 1px #3a3e2c;
+}
+
+.thinking-label { font-size: 0.78rem; animation: thinking-pulse 1.8s ease-in-out infinite; }
+.assistant-answer { font-size: 0.75rem; line-height: 1.55; }
+
+.voice-window {
+  display: flex;
+  height: 205px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  color: #d9f8ff;
+  border-radius: 8px;
+  background: #101d21;
+}
+
+.voice-avatar {
+  display: grid;
+  place-items: center;
+  width: 94px;
+  height: 94px;
+  border: 1px solid #29434a;
+  border-radius: 10px;
+  background: #15272c;
+  box-shadow: 0 0 0 7px rgba(142, 232, 255, 0.035);
+  transition: box-shadow 200ms ease, border-color 200ms ease;
+}
+
+.voice-window.is-responding .voice-avatar {
+  border-color: #4d8998;
+  box-shadow: 0 0 0 7px rgba(142, 232, 255, 0.07);
+}
+
+.voice-status { margin-top: 0.75rem; text-align: center; }
+.voice-status span { display: block; font-size: 0.76rem; }
+.voice-status small { display: block; margin-top: 0.25rem; color: #68868d; font-size: 0.62rem; }
+
+.sound-bars {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  width: 70px;
+  height: 18px;
+  margin-top: 0.65rem;
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+
+.voice-window.is-responding .sound-bars { opacity: 1; }
+.sound-bars i {
+  width: 3px;
+  height: 4px;
+  border-radius: 2px;
+  background: #8ee8ff;
+  animation: sound-bar 650ms ease-in-out infinite alternate;
+}
+.sound-bars i:nth-child(2), .sound-bars i:nth-child(6) { animation-delay: -420ms; }
+.sound-bars i:nth-child(3), .sound-bars i:nth-child(7) { animation-delay: -180ms; }
+.sound-bars i:nth-child(4) { animation-delay: -520ms; }
+.sound-bars i:nth-child(5) { animation-delay: -90ms; }
+
+@keyframes thinking-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+@keyframes sound-bar {
+  from { height: 3px; opacity: 0.45; }
+  to { height: 17px; opacity: 1; }
+}
+
+@media (max-width: 720px) {
+  .examples-grid { grid-template-columns: 1fr; }
+  .playground-layout { flex-direction: column; }
+  .demo-shell aside { position: static !important; width: 100% !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .thinking-label { animation: none; }
+  .sound-bars i { animation: none; height: 8px; }
+  .sound-bars i:nth-child(2), .sound-bars i:nth-child(6) { height: 13px; }
+  .sound-bars i:nth-child(4) { height: 17px; }
+}
