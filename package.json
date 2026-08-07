@@ -1,5 +1,5 @@
 {
-  "name": "sprite-light",
+  "name": "sprite-lite",
   "version": "0.1.1",
   "description": "Zero-dependency 8×8 pixel-art animation component for React.",
   "keywords": ["react", "animation", "pixel-art", "sprite", "component", "svg", "ui", "zero-dependency"],
@@ -15,9 +15,12 @@
     }
   },
   "files": ["dist"],
+  "sideEffects": false,
   "scripts": {
     "dev": "vite",
-    "build": "vite build"
+    "build": "vite build",
+    "build:demo": "vite build --config vite.config.demo.ts",
+    "prepublishOnly": "vite build"
   },
   "peerDependencies": {
     "react": ">=18"
@@ -32,5 +35,13 @@
     "vite": "^8.0.0",
     "vite-plugin-dts": "^4.5.4"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/marcsist/sprite-lite.git"
+  },
+  "homepage": "https://github.com/marcsist/sprite-lite#readme",
+  "bugs": {
+    "url": "https://github.com/marcsist/sprite-lite/issues"
+  }
 }

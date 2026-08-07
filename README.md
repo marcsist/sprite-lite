@@ -1,11 +1,11 @@
-# sprite-light
+# sprite-lite
 
 Zero-dependency 8×8 pixel-art animation component for React.
 
 ## Quick start
 
 ```tsx
-// Bare — cycles all 42 variants on click
+// Bare — cycles all 55 variants on click
 <ThinkingSprite />
 
 // Fixed variant — no cycling
@@ -49,7 +49,7 @@ Spells out text letter by letter using a built-in 3×5 pixel font. Supports A–
 
 ## Variants
 
-42 built-in variants:
+55 built-in variants:
 
 | Name | Animation |
 |---|---|
@@ -94,6 +94,21 @@ Spells out text letter by letter using a built-in 3×5 pixel font. Supports A–
 | Neko | Sitting cat with swishing tail and blink |
 | Worm | 5-segment creature undulating |
 | Face | Smiley that blinks and shifts expression |
+| TabulaRasa | Placeholder text lines that sweep clean and repeat |
+| Tamagotchi | Round pixel pet drifting, blinking, and walking |
+| Cursor | Blinking I-beam text cursor |
+| Arc | Spinning 3-pixel arc — modern loading spinner |
+| Neural | 3-node network with a pulse traveling the edges |
+| Think | Question mark draws in, holds, morphs into exclamation mark |
+| Loader | Horizontal progress bar filling left to right |
+| Radar | Boundary ring with rotating sweep arm from centre |
+| Wave | Three dots bouncing with staggered sinusoidal phase |
+| Cog | 4-tooth gear rotating between + and × positions |
+| Ping | Center dot emitting expanding diamond rings |
+| Clock | Ring face with fast minute hand and slow hour hand |
+| Step | Three dots filling left-to-right then draining |
+| Fill | 8-point ring filling clockwise, holds, resets |
+| Grow | Three columns growing from bottom to different heights |
 
 ## LED matrix mode
 
@@ -114,7 +129,7 @@ When `color` is a tuple, all 64 grid cells render — dim for unlit, primary for
 `VariantName` is exported for autocomplete and type safety:
 
 ```tsx
-import { ThinkingSprite, WriteSprite, type VariantName } from 'sprite-light'
+import { ThinkingSprite, WriteSprite, type VariantName } from 'sprite-lite'
 
-const myVariant: VariantName = 'DNA' // autocompletes all 42 names
+const myVariant: VariantName = 'DNA' // autocompletes all 55 names
 ```
