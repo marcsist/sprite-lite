@@ -5,7 +5,7 @@ export default defineConfig({
   plugins: [react()],
   base: '/sprite-lite/',
   build: {
-    outDir: 'docs',
+    outDir: 'dist-demo',
     emptyOutDir: true,
   },
 })
