@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { ThinkingSprite } from './ThinkingSprite'
 import { WriteSprite } from './WriteSprite'
 import { VARIANTS, type VariantName } from './variants'
+import './demo.css'
 
 const ALL_NAMES = VARIANTS.map((v) => v.name)
 
@@ -43,6 +44,8 @@ function copyWithFeedback(text: string, setCopied: (v: boolean) => void) {
 }
 
 export function Demo() {
+  const [showcaseThinking, setShowcaseThinking] = useState(true)
+  const [voiceResponding, setVoiceResponding] = useState(false)
   const [copied, setCopied] = useState(false)
   const [copiedThinking, setCopiedThinking] = useState(false)
   const [copiedWrite, setCopiedWrite] = useState(false)
@@ -58,9 +61,9 @@ export function Demo() {
   const [primaryColor, setPrimaryColor] = useState('#00ff88')
   const [dimColor, setDimColor] = useState('#1a2a1a')
 
-  const color: string | [string, string] | undefined = ledMode
+  const color: string | [string, string] = ledMode
     ? [primaryColor, dimColor]
-    : undefined
+    : primaryColor
 
   const subsetArray: VariantName[] | undefined =
     selectedSubset.size > 0 ? [...selectedSubset] : undefined
@@ -103,10 +106,13 @@ export function Demo() {
   }
 
   return (
-    <div style={{ fontFamily: 'monospace', padding: '2rem', maxWidth: 1100, margin: '0 auto' }}>
+    <div className="demo-shell" style={{ fontFamily: 'monospace', padding: '2rem', maxWidth: 1100, margin: '0 auto' }}>
       <header style={{ marginBottom: '1.5rem' }}>
-        <h1 style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>sprite-lite</h1>
-        <p style={{ color: '#888', marginBottom: '0.75rem' }}>
+        <div className="brand-lockup">
+          <span className="brand-mark" aria-hidden="true"><ThinkingSprite variant="Ghost" size={22} speed={105} /></span>
+          <h1 style={{ fontSize: '1.5rem' }}>sprite-lite</h1>
+        </div>
+        <p style={{ color: '#888', marginTop: '0.65rem', marginBottom: '0.75rem' }}>
           Zero-dependency 8×8 pixel-art animation component for React.
         </p>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
@@ -153,7 +159,7 @@ export function Demo() {
         </div>
       </header>
 
-      <div style={{ display: 'flex', alignItems: 'flex-start', gap: '2rem' }}>
+      <div className="playground-layout" style={{ display: 'flex', alignItems: 'flex-start', gap: '2rem' }}>
         {/* Sidebar */}
         <aside style={{
           width: 220,
@@ -202,17 +208,15 @@ export function Demo() {
                 <input type="range" min={0.15} max={0.48} step={0.01} value={dotRadius} onChange={(e) => setDotRadius(Number(e.target.value))} />
               </label>
             )}
+            <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+              <span>{ledMode ? 'Lit color' : 'Sprite color'}</span>
+              <input type="color" value={primaryColor} onChange={(e) => setPrimaryColor(e.target.value)} />
+            </label>
             {ledMode && (
-              <>
-                <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                  <span>Lit color</span>
-                  <input type="color" value={primaryColor} onChange={(e) => setPrimaryColor(e.target.value)} />
-                </label>
                 <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                   <span>Dim color</span>
                   <input type="color" value={dimColor} onChange={(e) => setDimColor(e.target.value)} />
                 </label>
-              </>
             )}
             <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
               <span>Lock variant</span>
@@ -428,6 +432,77 @@ export function Demo() {
           </section>
         </main>
       </div>
+
+      <section className="examples" aria-labelledby="examples-title">
+        <h2 id="examples-title">Examples</h2>
+        <div className="examples-grid">
+          <article className="example-card">
+            <div className="example-heading">
+              <div>
+                <h3>AI chat</h3>
+                <p>Use a sprite as an assistant avatar and thinking indicator.</p>
+              </div>
+              <button type="button" onClick={() => setShowcaseThinking((value) => !value)}>
+                {showcaseThinking ? 'Reply' : 'Reset'}
+              </button>
+            </div>
+
+            <div className="chat-window">
+              <div className="message-user">Why do fireflies glow?</div>
+              <div className="assistant-row" aria-live="polite">
+                <div className="sprite-avatar">
+                  <ThinkingSprite
+                    variant={showcaseThinking ? 'Campfire' : 'Face'}
+                    size={28}
+                    speed={110}
+                    shape="dot"
+                    dotRadius={0.36}
+                    color={['#e7ff72', '#343a26']}
+                  />
+                </div>
+                {showcaseThinking ? (
+                  <div className="thinking-label" role="status">Thinking<span aria-hidden="true">...</span></div>
+                ) : (
+                  <p className="assistant-answer">
+                    Fireflies glow through bioluminescence, a chemical reaction they use to communicate.
+                  </p>
+                )}
+              </div>
+            </div>
+          </article>
+
+          <article className="example-card">
+            <div className="example-heading">
+              <div>
+                <h3>Voice chat</h3>
+                <p>A responsive avatar for listening and speaking states.</p>
+              </div>
+              <button type="button" onClick={() => setVoiceResponding((value) => !value)}>
+                {voiceResponding ? 'Listen' : 'Respond'}
+              </button>
+            </div>
+
+            <div className={`voice-window${voiceResponding ? ' is-responding' : ''}`} aria-live="polite">
+              <div className="voice-avatar">
+                <ThinkingSprite
+                  variant={voiceResponding ? 'Bars' : 'Face'}
+                  size={76}
+                  speed={voiceResponding ? 60 : 280}
+                  shape="square"
+                  color={['#8ee8ff', '#203d45']}
+                />
+              </div>
+              <div className="voice-status">
+                <span>{voiceResponding ? 'Responding' : 'Listening'}</span>
+                <small>{voiceResponding ? 'Here’s what I found' : 'Go ahead, I’m listening'}</small>
+              </div>
+              <div className="sound-bars" aria-hidden="true">
+                {[0, 1, 2, 3, 4, 5, 6].map((bar) => <i key={bar} />)}
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
     </div>
   )
 }
