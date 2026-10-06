@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { ThinkingSprite } from './ThinkingSprite'
 import { WriteSprite } from './WriteSprite'
+import { StatusSetDemo } from './StatusSetDemo'
 import { VARIANTS, type VariantName } from './variants'
 import './demo.css'
 
@@ -432,6 +433,8 @@ export function Demo() {
           </section>
         </main>
       </div>
+
+      <StatusSetDemo />
 
       <section className="examples" aria-labelledby="examples-title">
         <h2 id="examples-title">Examples</h2>

@@ -173,3 +173,127 @@
   .sound-bars i:nth-child(2), .sound-bars i:nth-child(6) { height: 13px; }
   .sound-bars i:nth-child(4) { height: 17px; }
 }
+
+.status-set {
+  margin-top: 3.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid #222;
+}
+
+.status-set-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.status-set-header h2 {
+  font-size: 1rem;
+  margin-bottom: 0.4rem;
+}
+
+.status-set-header p {
+  color: #888;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  max-width: 42rem;
+}
+
+.status-set-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: #bbb;
+}
+
+.status-canvas {
+  padding: 1.25rem 1.4rem 1.4rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+
+.status-canvas h3 {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.status-canvas.light {
+  background: #f4f4f4;
+  color: #222;
+  border: 1px solid #e6e6e6;
+}
+
+.status-canvas.light h3,
+.status-canvas.light .status-size-label {
+  color: #6b6b6b;
+}
+
+.status-canvas.light .status-item-name { color: #222; }
+.status-canvas.light .status-item-meaning { color: #6b6b6b; }
+
+.status-canvas.dark {
+  background: #111;
+  color: #e8e8e8;
+  border: 1px solid #222;
+}
+
+.status-canvas.dark h3,
+.status-canvas.dark .status-size-label {
+  color: #888;
+}
+
+.status-canvas.dark .status-item-name { color: #e8e8e8; }
+.status-canvas.dark .status-item-meaning { color: #888; }
+
+.status-size-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 1.25rem;
+  margin-bottom: 1.15rem;
+}
+
+.status-size-row:last-child { margin-bottom: 0; }
+
+.status-size-label {
+  width: 3rem;
+  flex-shrink: 0;
+  font-size: 0.7rem;
+  padding-bottom: 1.55rem;
+}
+
+.status-row {
+  display: flex;
+  gap: 1.75rem;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+.status-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.28rem;
+  min-width: 4.5rem;
+}
+
+.status-item-name {
+  font-size: 0.72rem;
+  margin-top: 0.15rem;
+}
+
+.status-item-meaning {
+  font-size: 0.62rem;
+}
+
+@media (max-width: 720px) {
+  .status-set-header { flex-direction: column; }
+  .status-size-row { flex-direction: column; align-items: flex-start; }
+  .status-size-label { padding-bottom: 0; }
+}
