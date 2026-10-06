@@ -254,7 +254,7 @@
 
 .status-size-row {
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 1.25rem;
   margin-bottom: 1.15rem;
 }
@@ -265,14 +265,14 @@
   width: 3rem;
   flex-shrink: 0;
   font-size: 0.7rem;
-  padding-bottom: 2.7rem;
+  padding-top: 0.2rem;
 }
 
 .status-row {
   display: flex;
-  gap: 1.25rem;
-  flex-wrap: wrap;
-  align-items: flex-end;
+  gap: 1.75rem;
+  flex-wrap: nowrap;
+  align-items: flex-start;
 }
 
 .status-item {
@@ -280,7 +280,6 @@
   flex-direction: column;
   align-items: center;
   gap: 0.28rem;
-  width: 9.75rem;
   text-align: center;
 }
 
@@ -291,15 +290,14 @@
 }
 
 .status-item-meaning {
-  display: block;
-  width: 100%;
   font-size: 12px;
   font-weight: 400;
   line-height: 1.35;
+  white-space: nowrap;
 }
 
 @media (max-width: 720px) {
   .status-set-header { flex-direction: column; }
   .status-size-row { flex-direction: column; align-items: flex-start; }
-  .status-size-label { padding-bottom: 0; }
+  .status-size-label { padding-top: 0; }
 }

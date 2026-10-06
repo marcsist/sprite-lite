@@ -7,11 +7,11 @@ const DARK: [string, string] = ['#ededed', '#3a3a3a']
 const SIZES = [12, 16, 20] as const
 
 const DEMO_MEANINGS: Record<StatusVariant, string> = {
-  Wait: 'queued · waiting on input',
+  Wait: 'queued',
   Think: 'composing',
   Work: 'running tools',
-  Sync: 'retraining · deploying',
-  Ready: 'idle · done',
+  Sync: 'retraining',
+  Ready: 'idle',
 }
 
 export function StatusSetDemo() {
