@@ -12,6 +12,7 @@ All notable changes to sprite-lite are documented here.
 
 ### Changed
 - Demo 3×3 section sits on the page theme like the 8×8 set: one row of five states, driven by the playground controls, with the CODE snippet switching to `<StatusSprite />` when a state is selected.
+- Demo 3×3 row includes a looping product-status example (Queued → Ready) after the five states. It follows the playground controls, is not selectable, and does not change the CODE snippet.
 
 ## [0.1.1] - 2026-04-13
 

@@ -1,4 +1,5 @@
 import { StatusSprite, type StatusVariant } from './StatusSprite'
+import { StatusLifecycle } from './StatusLifecycle'
 import { STATUS_VARIANTS } from './status'
 
 export function StatusSetDemo({
@@ -27,28 +28,38 @@ export function StatusSetDemo({
         <p>Five quiet status lights.</p>
       </div>
       <div className="status-row">
-        {STATUS_VARIANTS.map((variant) => (
-          <button
-            key={variant}
-            type="button"
-            className={`status-item${selected === variant ? ' is-selected' : ''}`}
-            data-status-variant={variant}
-            aria-pressed={selected === variant}
-            onClick={() => onSelect(variant)}
-            onFocus={() => onSelect(variant)}
-          >
-            <StatusSprite
-              variant={variant}
-              size={size}
-              color={color}
-              shape={shape}
-              dotRadius={dotRadius}
-              speed={speed}
-              active={active}
-            />
-            <span className="status-item-name">{variant}</span>
-          </button>
-        ))}
+        <div className="status-states">
+          {STATUS_VARIANTS.map((variant) => (
+            <button
+              key={variant}
+              type="button"
+              className={`status-item${selected === variant ? ' is-selected' : ''}`}
+              data-status-variant={variant}
+              aria-pressed={selected === variant}
+              onClick={() => onSelect(variant)}
+              onFocus={() => onSelect(variant)}
+            >
+              <StatusSprite
+                variant={variant}
+                size={size}
+                color={color}
+                shape={shape}
+                dotRadius={dotRadius}
+                speed={speed}
+                active={active}
+              />
+              <span className="status-item-name">{variant}</span>
+            </button>
+          ))}
+        </div>
+        <StatusLifecycle
+          size={size}
+          speed={speed}
+          active={active}
+          color={color}
+          shape={shape}
+          dotRadius={dotRadius}
+        />
       </div>
     </section>
   )

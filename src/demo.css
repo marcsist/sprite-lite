@@ -205,9 +205,69 @@
 
 .status-row {
   display: flex;
-  gap: 1.25rem;
   flex-wrap: wrap;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.status-states {
+  display: flex;
+  flex-shrink: 0;
+  flex-wrap: nowrap;
   align-items: flex-start;
+  gap: 1.25rem;
+}
+
+.status-lifecycle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 10rem;
+  margin-left: 0.35rem;
+  padding-left: 1.25rem;
+  border-left: 1px solid #3a3a3a;
+}
+
+.status-lifecycle-copy {
+  position: relative;
+  display: grid;
+  justify-items: start;
+}
+
+.status-lifecycle-label {
+  grid-area: 1 / 1;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.35;
+  color: #ededed;
+  transition: opacity 150ms ease;
+}
+
+.status-lifecycle-label.is-leave {
+  opacity: 0;
+}
+
+@media (max-width: 720px) {
+  .status-lifecycle {
+    flex-basis: 100%;
+    margin-left: 0;
+    padding-left: 0;
+    border-left: none;
+  }
+}
+
+html[data-theme="light"] .status-lifecycle {
+  border-left-color: #d6d6d6;
+}
+
+html[data-theme="light"] .status-lifecycle-label {
+  color: #141414;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .status-lifecycle-label {
+    transition: none;
+  }
 }
 
 .status-item {
