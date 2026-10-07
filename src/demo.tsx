@@ -49,7 +49,6 @@ function SnippetBlock({
           fontSize: '0.7rem',
           overflowX: 'hidden',
           whiteSpace: 'pre-wrap',
-          overflowWrap: 'anywhere',
           margin: 0,
         }}
       >
@@ -238,7 +237,7 @@ export function Demo() {
       <div className="playground-layout" style={{ display: 'flex', alignItems: 'flex-start', gap: '2rem' }}>
         {/* Sidebar */}
         <aside style={{
-          width: 220,
+          width: 280,
           flexShrink: 0,
           position: 'sticky',
           top: 0,
