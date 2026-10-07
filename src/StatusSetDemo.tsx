@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react'
 import { StatusSprite, type StatusVariant } from './StatusSprite'
-import { StatusLifecycle } from './StatusLifecycle'
+import { StatusBoard } from './StatusBoard'
 import { STATUS_VARIANTS } from './status'
 
 export function StatusSetDemo({
@@ -58,7 +58,7 @@ export function StatusSetDemo({
             </button>
           ))}
         </div>
-        <StatusLifecycle
+        <StatusBoard
           size={size}
           speed={speed}
           active={active}
