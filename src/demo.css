@@ -220,25 +220,20 @@
   text-align: center;
   color: inherit;
   font: inherit;
-  background: none;
+  background: transparent;
   border: 1px solid transparent;
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
 }
 
-.status-item:hover,
 .status-item:focus-visible {
-  border-color: #333;
-}
-
-.status-item:focus-visible {
-  outline: 2px solid #dfff55;
+  outline: 1px solid #3a3a3a;
   outline-offset: 2px;
 }
 
 .status-item.is-selected {
-  border-color: #00ff88;
-  background: #1a1a2e;
+  border-color: #3a3a3a;
+  background: transparent;
 }
 
 .status-item-name {
@@ -246,6 +241,10 @@
   font-weight: 400;
   margin-top: 0.15rem;
   color: #aaa;
+}
+
+.status-item.is-selected .status-item-name {
+  color: #ededed;
 }
 
 html[data-theme="light"] body {
@@ -258,12 +257,15 @@ html[data-theme="light"] .status-item-name {
   color: #555;
 }
 
-html[data-theme="light"] .status-item:hover,
-html[data-theme="light"] .status-item:focus-visible {
-  border-color: #ccc;
+html[data-theme="light"] .status-item.is-selected {
+  border-color: #d6d6d6;
+  background: transparent;
 }
 
-html[data-theme="light"] .status-item.is-selected {
-  background: #ececec;
-  border-color: #111;
+html[data-theme="light"] .status-item.is-selected .status-item-name {
+  color: #141414;
+}
+
+html[data-theme="light"] .status-item:focus-visible {
+  outline-color: #d6d6d6;
 }

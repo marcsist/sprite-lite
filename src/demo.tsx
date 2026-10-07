@@ -87,7 +87,7 @@ export function Demo() {
   const [ledMode, setLedMode] = useState(false)
   const [lockedVariant, setLockedVariant] = useState<VariantName | undefined>(undefined)
   const [selectedSubset, setSelectedSubset] = useState<Set<VariantName>>(new Set())
-  const [dotMode, setDotMode] = useState(false)
+  const [dotMode, setDotMode] = useState(true)
   const [dotRadius, setDotRadius] = useState(0.38)
   const [primaryColor, setPrimaryColor] = useState('#00ff88')
   const [dimColor, setDimColor] = useState('#1a2a1a')
@@ -154,6 +154,7 @@ export function Demo() {
       shape,
       speed,
       active,
+      dotRadius,
     },
     STATUS_DEFAULTS
   )
@@ -397,6 +398,7 @@ export function Demo() {
             active={active}
             color={statusColor}
             shape={shape}
+            dotRadius={dotRadius}
             selected={snippetFocus === 'status' ? statusVariant : undefined}
             onSelect={selectStatus}
           />

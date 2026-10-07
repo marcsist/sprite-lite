@@ -7,6 +7,7 @@ export function StatusSetDemo({
   active,
   color,
   shape,
+  dotRadius,
   selected,
   onSelect,
 }: {
@@ -15,6 +16,7 @@ export function StatusSetDemo({
   active: boolean
   color: string | [string, string]
   shape: 'dot' | 'square'
+  dotRadius: number
   selected?: StatusVariant
   onSelect: (variant: StatusVariant) => void
 }) {
@@ -40,6 +42,7 @@ export function StatusSetDemo({
               size={size}
               color={color}
               shape={shape}
+              dotRadius={dotRadius}
               speed={speed}
               active={active}
             />

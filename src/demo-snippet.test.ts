@@ -29,7 +29,7 @@ describe('formatSnippet', () => {
 })
 
 describe('StatusSprite snippet', () => {
-  it('keeps variant and omits library defaults', () => {
+  it('keeps variant and omits library defaults including shape="dot" and r 0.32', () => {
     expect(
       formatSnippet(
         'StatusSprite',
@@ -39,13 +39,34 @@ describe('StatusSprite snippet', () => {
           shape: 'dot',
           speed: 90,
           active: true,
+          dotRadius: 0.32,
         },
         STATUS_DEFAULTS
       )
     ).toBe(`<StatusSprite\n  variant="Wait"\n/>`)
   })
 
-  it('emits size, color tuple, square shape, speed, and inactive', () => {
+  it('prints the shared slider radius when it differs from 0.32, and omits shape when it is dot', () => {
+    expect(
+      formatSnippet(
+        'StatusSprite',
+        {
+          variant: 'Wait',
+          size: 32,
+          color: ['#ededed', '#3a3a3a'],
+          shape: 'dot',
+          speed: 90,
+          active: true,
+          dotRadius: 0.38,
+        },
+        STATUS_DEFAULTS
+      )
+    ).toBe(
+      `<StatusSprite\n  variant="Wait"\n  size={32}\n  color={["#ededed","#3a3a3a"]}\n  dotRadius={0.38}\n/>`
+    )
+  })
+
+  it('prints shape="square" only when the shared control is off', () => {
     expect(
       formatSnippet(
         'StatusSprite',
@@ -56,11 +77,12 @@ describe('StatusSprite snippet', () => {
           shape: 'square',
           speed: 40,
           active: false,
+          dotRadius: 0.38,
         },
         STATUS_DEFAULTS
       )
     ).toBe(
-      `<StatusSprite\n  variant="Think"\n  size={48}\n  color={["#ff00aa","#110011"]}\n  shape="square"\n  speed={40}\n  active={false}\n/>`
+      `<StatusSprite\n  variant="Think"\n  size={48}\n  color={["#ff00aa","#110011"]}\n  shape="square"\n  speed={40}\n  active={false}\n  dotRadius={0.38}\n/>`
     )
   })
 
@@ -72,22 +94,24 @@ describe('StatusSprite snippet', () => {
           variant: 'Sync',
           size: 32,
           color: '#00ff88',
-          shape: 'square',
+          shape: 'dot',
           speed: 90,
           active: true,
+          dotRadius: 0.38,
         },
         STATUS_DEFAULTS
       )
-    ).toBe(`<StatusSprite\n  variant="Sync"\n  size={32}\n  color="#00ff88"\n  shape="square"\n/>`)
+    ).toBe(`<StatusSprite\n  variant="Sync"\n  size={32}\n  color="#00ff88"\n  dotRadius={0.38}\n/>`)
   })
 
   it('switches variant when a 3×3 state is selected', () => {
     const props = {
       size: 32,
       color: ['#ededed', '#3a3a3a'] as [string, string],
-      shape: 'square' as const,
+      shape: 'dot' as const,
       speed: 90,
       active: true,
+      dotRadius: 0.38,
     }
     expect(
       formatSnippet('StatusSprite', { variant: 'Wait', ...props }, STATUS_DEFAULTS)
@@ -105,14 +129,15 @@ describe('StatusSprite snippet', () => {
           variant: 'Work',
           size: 32,
           color: ['#ededed', '#3a3a3a'],
-          shape: 'square',
+          shape: 'dot',
           speed: 90,
           active: true,
+          dotRadius: 0.38,
         },
         STATUS_DEFAULTS
       )
     ).toBe(
-      `<StatusSprite\n  variant="Work"\n  size={32}\n  color={["#ededed","#3a3a3a"]}\n  shape="square"\n/>`
+      `<StatusSprite\n  variant="Work"\n  size={32}\n  color={["#ededed","#3a3a3a"]}\n  dotRadius={0.38}\n/>`
     )
   })
 
@@ -124,9 +149,10 @@ describe('StatusSprite snippet', () => {
           variant: 'Wait',
           size: 32,
           color: ['#141414', '#d6d6d6'],
-          shape: 'square',
+          shape: 'dot',
           speed: 90,
           active: true,
+          dotRadius: 0.38,
         },
         STATUS_DEFAULTS
       )
