@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react'
 import { StatusSprite, type StatusVariant } from './StatusSprite'
 import { StatusLifecycle } from './StatusLifecycle'
 import { STATUS_VARIANTS } from './status'
@@ -22,7 +23,12 @@ export function StatusSetDemo({
   onSelect: (variant: StatusVariant) => void
 }) {
   return (
-    <section className="status-set" id="status-set" aria-labelledby="status-set-title">
+    <section
+      className="status-set"
+      id="status-set"
+      aria-labelledby="status-set-title"
+      style={{ '--status-size': `${size}px` } as CSSProperties}
+    >
       <div className="status-set-header">
         <h2 id="status-set-title">3×3 status set</h2>
         <p>Five quiet status lights.</p>

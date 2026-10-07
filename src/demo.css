@@ -185,6 +185,7 @@
 
 .status-set {
   --status-tile-pad: 8px;
+  --status-size: 32px;
   margin: 0 0 2rem;
   padding: 0;
 }
@@ -226,6 +227,7 @@
   min-width: 10rem;
   margin-left: 0.35rem;
   padding-top: var(--status-tile-pad);
+  border-top: 1px solid transparent;
 }
 
 .status-lifecycle-body {
@@ -265,7 +267,8 @@
     margin-left: 0;
     margin-top: calc(-1 * var(--status-tile-pad));
     padding-top: 0;
-    padding-left: var(--status-tile-pad);
+    padding-left: max(var(--status-tile-pad), calc((4.5rem - var(--status-size)) / 2));
+    border-top: none;
   }
 
   .status-lifecycle-body {
