@@ -184,6 +184,7 @@
 }
 
 .status-set {
+  --status-tile-pad: 8px;
   margin: 0 0 2rem;
   padding: 0;
 }
@@ -206,8 +207,9 @@
 .status-row {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  gap: 1.25rem;
+  align-items: flex-start;
+  column-gap: 1.25rem;
+  row-gap: 1.25rem;
 }
 
 .status-states {
@@ -220,12 +222,22 @@
 
 .status-lifecycle {
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  flex-direction: column;
   min-width: 10rem;
   margin-left: 0.35rem;
+  padding-top: var(--status-tile-pad);
+}
+
+.status-lifecycle-body {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   padding-left: 1.25rem;
   border-left: 1px solid #3a3a3a;
+}
+
+.status-lifecycle-sprite {
+  display: flex;
 }
 
 .status-lifecycle-copy {
@@ -251,12 +263,18 @@
   .status-lifecycle {
     flex-basis: 100%;
     margin-left: 0;
+    margin-top: calc(-1 * var(--status-tile-pad));
+    padding-top: 0;
+    padding-left: var(--status-tile-pad);
+  }
+
+  .status-lifecycle-body {
     padding-left: 0;
     border-left: none;
   }
 }
 
-html[data-theme="light"] .status-lifecycle {
+html[data-theme="light"] .status-lifecycle-body {
   border-left-color: #d6d6d6;
 }
 
@@ -276,7 +294,7 @@ html[data-theme="light"] .status-lifecycle-label {
   align-items: center;
   gap: 0.28rem;
   min-width: 4.5rem;
-  padding: 8px;
+  padding: var(--status-tile-pad);
   text-align: center;
   color: inherit;
   font: inherit;

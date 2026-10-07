@@ -48,18 +48,20 @@ export function StatusLifecycle({
       role="group"
       aria-label="Status lifecycle example"
     >
-      <span aria-hidden="true">
-        <StatusSprite
-          variant={step.variant}
-          size={size}
-          color={color}
-          shape={shape}
-          dotRadius={dotRadius}
-          speed={speed}
-          active={active}
-        />
-      </span>
-      <LifecycleLabel text={step.label} />
+      <div className="status-lifecycle-body">
+        <span className="status-lifecycle-sprite" aria-hidden="true">
+          <StatusSprite
+            variant={step.variant}
+            size={size}
+            color={color}
+            shape={shape}
+            dotRadius={dotRadius}
+            speed={speed}
+            active={active}
+          />
+        </span>
+        <LifecycleLabel text={step.label} />
+      </div>
     </div>
   )
 }
