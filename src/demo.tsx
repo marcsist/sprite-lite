@@ -173,7 +173,7 @@ export function Demo() {
   }
 
   return (
-    <div className="demo-shell" style={{ fontFamily: 'monospace', padding: '2rem', maxWidth: 1100, margin: '0 auto' }}>
+    <div className="demo-shell" style={{ fontFamily: 'monospace', padding: '2rem', maxWidth: 1280, margin: '0 auto' }}>
       <header style={{ marginBottom: '1.5rem' }}>
         <div className="brand-lockup">
           <span className="brand-mark" aria-hidden="true"><ThinkingSprite variant="Ghost" size={22} speed={105} /></span>
