@@ -1,9 +1,11 @@
 import { useEffect, useState, useSyncExternalStore } from 'react'
 import {
   STATUS_LABELS,
+  STATUS_SPEED_DEFAULT,
   clampDotRadius,
   DOT_RADIUS_DEFAULT,
   levelsAt,
+  resolveStatusDuration,
   restingLevels,
   SQUARE_INSET,
   SQUARE_RX,
@@ -31,7 +33,13 @@ export interface StatusSpriteProps {
   dotRadius?: number
   /** When false, freeze on the variant's resting frame. Default: true */
   active?: boolean
-  /** Milliseconds per loop, including rests. Defaults per variant. */
+  /**
+   * Milliseconds per animation tick, same feel as ThinkingSprite.
+   * Scales the variant's loop (including rests). Lower = faster. Default: 90.
+   * Ignored when `duration` is set.
+   */
+  speed?: number
+  /** Milliseconds per loop, including rests. Defaults per variant. Wins over `speed`. */
   duration?: number
   /** aria-label. Defaults: Waiting, Thinking, Working, Syncing, Ready. */
   label?: string
@@ -58,26 +66,28 @@ export function StatusSprite({
   shape = 'dot',
   dotRadius = DOT_RADIUS_DEFAULT,
   active = true,
+  speed = STATUS_SPEED_DEFAULT,
   duration,
   label,
 }: StatusSpriteProps) {
   const reducedMotion = usePrefersReducedMotion()
   const frozen = !active || reducedMotion || variant === 'Ready'
-  const [levels, setLevels] = useState(() => levelsAt(variant, 0, duration))
+  const loopDuration = resolveStatusDuration(variant, duration, speed)
+  const [levels, setLevels] = useState(() => levelsAt(variant, 0, loopDuration))
   const displayed = frozen ? restingLevels(variant) : levels
 
   useEffect(() => {
     if (frozen) return
-    setLevels(levelsAt(variant, 0, duration))
+    setLevels(levelsAt(variant, 0, loopDuration))
     let id = 0
     const origin = performance.now()
     const loop = (now: number) => {
-      setLevels(levelsAt(variant, now - origin, duration))
+      setLevels(levelsAt(variant, now - origin, loopDuration))
       id = requestAnimationFrame(loop)
     }
     id = requestAnimationFrame(loop)
     return () => cancelAnimationFrame(id)
-  }, [frozen, variant, duration])
+  }, [frozen, variant, loopDuration])
 
   const isLedMode = Array.isArray(color) && color.length >= 2
   const primaryColor = isLedMode

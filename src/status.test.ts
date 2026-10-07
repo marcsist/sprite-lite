@@ -5,9 +5,11 @@ import {
   STATUS_DURATION,
   STATUS_FRAMES,
   STATUS_LABELS,
+  STATUS_SPEED_DEFAULT,
   clampDotRadius,
   levelsAt,
   quantizeLevel,
+  resolveStatusDuration,
   restingLevels,
   waitCenterLevel,
   type StatusVariant,
@@ -174,6 +176,32 @@ describe('loop timings', () => {
   it('scales Think when duration is overridden', () => {
     expectLevels(levelsAt('Think', 0, 1760), STATUS_FRAMES.Think[0])
     expectLevels(levelsAt('Think', 220 + 180, 1760), STATUS_FRAMES.Think[1])
+  })
+
+  it('keeps Work rest in proportion when the loop is scaled', () => {
+    expectLevels(levelsAt('Work', 1600, 1960), parse(SPEC_FRAMES.Work[5]))
+  })
+})
+
+describe('resolveStatusDuration', () => {
+  it('defaults speed to 90 and leaves spec duration in place', () => {
+    expect(STATUS_SPEED_DEFAULT).toBe(90)
+    expect(resolveStatusDuration('Wait')).toBeUndefined()
+    expect(resolveStatusDuration('Wait', undefined, 90)).toBeUndefined()
+    expect(resolveStatusDuration('Think', undefined, 90)).toBeUndefined()
+  })
+
+  it('scales each variant loop by speed/90, including Ready at 0', () => {
+    expect(resolveStatusDuration('Wait', undefined, 45)).toBe(1200)
+    expect(resolveStatusDuration('Think', undefined, 45)).toBe(440)
+    expect(resolveStatusDuration('Work', undefined, 180)).toBe(1960)
+    expect(resolveStatusDuration('Sync', undefined, 45)).toBe(800)
+    expect(resolveStatusDuration('Ready', undefined, 45)).toBe(0)
+  })
+
+  it('lets an explicit duration win over speed', () => {
+    expect(resolveStatusDuration('Wait', 1000, 45)).toBe(1000)
+    expect(resolveStatusDuration('Think', 0, 45)).toBe(0)
   })
 })
 

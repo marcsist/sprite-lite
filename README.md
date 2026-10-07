@@ -146,7 +146,8 @@ import { StatusSprite, type StatusVariant } from 'sprite-lite'
 | `shape` | `'dot' \| 'square'` | `'dot'` | Dot is the recommended look. Square is an inset rect (`x+0.14`, size `0.72`, `rx 0.1`), never full-cell. |
 | `dotRadius` | `number` | `0.32` | Dot radius in cell units, clamped to 0.26–0.38. |
 | `active` | `boolean` | `true` | When `false`, freeze on the variant's resting frame. |
-| `duration` | `number` | per variant | Milliseconds per loop, including rests. Defaults: Wait 2400, Think 880, Work 980, Sync 1600. Ready is static. |
+| `speed` | `number` | `90` | Milliseconds per animation tick, same feel as ThinkingSprite. Scales the variant's loop including rests. Lower = faster. Ignored when `duration` is set. |
+| `duration` | `number` | per variant | Milliseconds per loop, including rests. Defaults: Wait 2400, Think 880, Work 980, Sync 1600. Ready is static. Wins over `speed`. |
 | `label` | `string` | per variant | `aria-label`. Defaults: Waiting, Thinking, Working, Syncing, Ready. |
 
 Always `role="img"`. No click-cycling. Both `active={false}` and `prefers-reduced-motion: reduce` show that variant's defined resting frame — the state stays visible.
@@ -162,7 +163,7 @@ Neutral LED tuples: light `['#141414', '#d6d6d6']`, dark `['#ededed', '#3a3a3a']
 | Variants | 55, cycling allowed | 5 fixed states, no cycling |
 | Pixels | Binary | 4 levels, crossfaded |
 | Shape | `square` default, `dot` optional | `dot` default, inset `square` optional |
-| Shared | `size`, `color` (string or tuple), `shape`, `active` | same |
+| Shared | `size`, `color` (string or tuple), `shape`, `active`, `speed` | same (`duration` is 3×3-only) |
 
 `StatusVariant` is its own type, so names do not collide with the 8×8 set. Existing 8×8 variants are unchanged.
 

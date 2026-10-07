@@ -153,4 +153,9 @@ describe('StatusSprite', () => {
       expect(el.getAttribute('r')).toBe('0.32')
     })
   })
+
+  it('accepts speed without changing the default aria label', () => {
+    const { container } = render(<StatusSprite variant="Wait" speed={45} />)
+    expect(svg(container).getAttribute('aria-label')).toBe('Waiting')
+  })
 })

@@ -42,6 +42,27 @@ export const STATUS_DURATION: Record<StatusVariant, number> = {
   Ready: 0,
 }
 
+/** Same default as ThinkingSprite `speed`. Lower is faster. */
+export const STATUS_SPEED_DEFAULT = 90
+
+/**
+ * Resolve the loop length passed to `levelsAt`.
+ * An explicit `duration` always wins. Otherwise `speed` (ms/tick, default 90)
+ * scales the variant's spec duration, including rests. `undefined` means
+ * "use the spec duration" so internal ratios stay intact.
+ */
+export function resolveStatusDuration(
+  variant: StatusVariant,
+  duration?: number,
+  speed?: number
+): number | undefined {
+  if (duration != null) return duration
+  if (speed == null || speed === STATUS_SPEED_DEFAULT) return undefined
+  const base = STATUS_DURATION[variant]
+  if (base <= 0) return base
+  return base * (speed / STATUS_SPEED_DEFAULT)
+}
+
 const D = LEVEL.dim
 const L = LEVEL.low
 const M = LEVEL.mid
