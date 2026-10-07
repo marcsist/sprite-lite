@@ -47,7 +47,9 @@ function SnippetBlock({
           borderRadius: 4,
           padding: '8px 10px',
           fontSize: '0.7rem',
-          overflowX: 'auto',
+          overflowX: 'hidden',
+          whiteSpace: 'pre-wrap',
+          overflowWrap: 'anywhere',
           margin: 0,
         }}
       >
