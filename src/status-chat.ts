@@ -19,8 +19,12 @@ export const CHAT_BUSY_STEPS: readonly { variant: StatusVariant; label: string }
 
 export const CHAT_FROZEN_STEP = 1
 
-export const CHAT_FRAGMENT_COPY =
-  'Looks like a race in the session store. I serialised the cart writes.\n…and the checkout test passes locally now. I\'ll run the full suite next.'
+export const CHAT_FRAGMENT_COPY = [
+  'Looks like a race in the session store.',
+  'I serialised the cart writes.',
+  '…and the checkout test passes locally now.',
+  "I'll run the full suite next.",
+].join('\n')
 
 export const CHAT_DONE_COPY = 'Done — all 214 tests pass.'
 export const CHAT_INPUT_PLACEHOLDER = 'Message your bot'

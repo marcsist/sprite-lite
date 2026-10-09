@@ -241,11 +241,14 @@
 }
 
 .status-chat-fragment {
-  max-height: 4.15em;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: calc(2.8em + 12px);
   overflow: hidden;
   border-radius: 10px;
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 52%);
-  mask-image: linear-gradient(to bottom, transparent 0%, #000 52%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 48%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 48%);
 }
 
 .status-chat-bubble {
@@ -375,12 +378,14 @@
 @media (max-width: 720px) {
   .status-chat {
     flex-basis: 100%;
-    width: 360px;
+    width: auto;
     margin-left: 0;
     padding-left: max(var(--status-tile-pad), calc((4.5rem - var(--status-size)) / 2));
   }
 
   .status-chat-body {
+    width: 360px;
+    max-width: 100%;
     padding-left: 0;
     border-left: none;
   }
