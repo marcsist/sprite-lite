@@ -7,7 +7,14 @@ export default defineConfig({
     react(),
     dts({
       insertTypesEntry: true,
-      include: ['src/index.ts', 'src/ThinkingSprite.tsx', 'src/WriteSprite.tsx', 'src/variants.ts'],
+      include: [
+        'src/index.ts',
+        'src/ThinkingSprite.tsx',
+        'src/WriteSprite.tsx',
+        'src/variants.ts',
+        'src/StatusSprite.tsx',
+        'src/status.ts',
+      ],
     }),
   ],
   build: {

@@ -1,46 +1,77 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ThinkingSprite } from './ThinkingSprite'
 import { WriteSprite } from './WriteSprite'
+import { StatusSetDemo } from './StatusSetDemo'
 import { VARIANTS, type VariantName } from './variants'
+import type { StatusVariant } from './status'
+import {
+  formatSnippet,
+  STATUS_DEFAULTS,
+  THINKING_DEFAULTS,
+  WRITE_DEFAULTS,
+} from './demo-snippet'
 import './demo.css'
 
 const ALL_NAMES = VARIANTS.map((v) => v.name)
 
-const THINKING_DEFAULTS: Record<string, unknown> = {
-  size: 16,
-  active: true,
-  speed: 90,
-  shape: 'square',
-  dotRadius: 0.38,
-}
+const STATUS_LIGHT: [string, string] = ['#141414', '#d6d6d6']
+const STATUS_DARK: [string, string] = ['#ededed', '#3a3a3a']
 
-const WRITE_DEFAULTS: Record<string, unknown> = {
-  text: 'HELLO',
-  size: 16,
-  speed: 90,
-  active: true,
-  shape: 'square',
-  dotRadius: 0.38,
-}
-
-function formatSnippet(
-  componentName: string,
-  props: Record<string, unknown>,
-  defaults: Record<string, unknown>
-): string {
-  const lines: string[] = []
-  for (const [key, value] of Object.entries(props)) {
-    if (value === undefined) continue
-    if (key in defaults && JSON.stringify(value) === JSON.stringify(defaults[key])) continue
-    lines.push(typeof value === 'string' ? `  ${key}="${value}"` : `  ${key}={${JSON.stringify(value)}}`)
-  }
-  return lines.length === 0 ? `<${componentName} />` : `<${componentName}\n${lines.join('\n')}\n/>`
-}
+type SnippetFocus = 'thinking' | 'write' | 'status'
+type PageTheme = 'dark' | 'light'
 
 function copyWithFeedback(text: string, setCopied: (v: boolean) => void) {
   navigator.clipboard.writeText(text)
   setCopied(true)
   setTimeout(() => setCopied(false), 2000)
+}
+
+function SnippetBlock({
+  kind,
+  text,
+  copied,
+  onCopy,
+}: {
+  kind: SnippetFocus
+  text: string
+  copied: boolean
+  onCopy: () => void
+}) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+      <pre
+        data-snippet-kind={kind}
+        style={{
+          background: '#1a1a1a',
+          border: '1px solid #333',
+          borderRadius: 4,
+          padding: '8px 10px',
+          fontSize: '0.7rem',
+          overflowX: 'hidden',
+          whiteSpace: 'pre-wrap',
+          margin: 0,
+        }}
+      >
+        {text}
+      </pre>
+      <button
+        onClick={onCopy}
+        style={{
+          alignSelf: 'flex-start',
+          background: 'none',
+          border: '1px solid #333',
+          borderRadius: 4,
+          padding: '2px 8px',
+          color: '#888',
+          fontFamily: 'monospace',
+          fontSize: '0.7rem',
+          cursor: 'pointer',
+        }}
+      >
+        {copied ? '✓ copied' : 'copy'}
+      </button>
+    </div>
+  )
 }
 
 export function Demo() {
@@ -56,14 +87,31 @@ export function Demo() {
   const [ledMode, setLedMode] = useState(false)
   const [lockedVariant, setLockedVariant] = useState<VariantName | undefined>(undefined)
   const [selectedSubset, setSelectedSubset] = useState<Set<VariantName>>(new Set())
-  const [dotMode, setDotMode] = useState(false)
+  const [dotMode, setDotMode] = useState(true)
   const [dotRadius, setDotRadius] = useState(0.38)
   const [primaryColor, setPrimaryColor] = useState('#00ff88')
   const [dimColor, setDimColor] = useState('#1a2a1a')
+  const [colorTouched, setColorTouched] = useState(false)
+  const [theme, setTheme] = useState<PageTheme>('dark')
+  const [snippetFocus, setSnippetFocus] = useState<SnippetFocus>('thinking')
+  const [statusVariant, setStatusVariant] = useState<StatusVariant>('Wait')
+  const [copiedStatus, setCopiedStatus] = useState(false)
 
   const color: string | [string, string] = ledMode
     ? [primaryColor, dimColor]
     : primaryColor
+
+  const statusColor: string | [string, string] = colorTouched
+    ? color
+    : theme === 'light'
+      ? STATUS_LIGHT
+      : STATUS_DARK
+
+  const shape = dotMode ? 'dot' : 'square'
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme
+  }, [theme])
 
   const subsetArray: VariantName[] | undefined =
     selectedSubset.size > 0 ? [...selectedSubset] : undefined
@@ -77,7 +125,7 @@ export function Demo() {
       color,
       variant: lockedVariant,
       variants: subsetArray,
-      shape: dotMode ? 'dot' : 'square',
+      shape,
       dotRadius,
     },
     THINKING_DEFAULTS
@@ -91,11 +139,30 @@ export function Demo() {
       speed,
       active,
       color,
-      shape: dotMode ? 'dot' : 'square',
+      shape,
       dotRadius,
     },
     WRITE_DEFAULTS
   )
+
+  const statusSnippet = formatSnippet(
+    'StatusSprite',
+    {
+      variant: statusVariant,
+      size,
+      color: statusColor,
+      shape,
+      speed,
+      active,
+      dotRadius,
+    },
+    STATUS_DEFAULTS
+  )
+
+  function selectStatus(variant: StatusVariant) {
+    setStatusVariant(variant)
+    setSnippetFocus('status')
+  }
 
   function toggleSubset(name: VariantName) {
     setSelectedSubset((prev) => {
@@ -106,7 +173,7 @@ export function Demo() {
   }
 
   return (
-    <div className="demo-shell" style={{ fontFamily: 'monospace', padding: '2rem', maxWidth: 1100, margin: '0 auto' }}>
+    <div className="demo-shell" style={{ fontFamily: 'monospace', padding: '2rem', maxWidth: 1280, margin: '0 auto' }}>
       <header style={{ marginBottom: '1.5rem' }}>
         <div className="brand-lockup">
           <span className="brand-mark" aria-hidden="true"><ThinkingSprite variant="Ghost" size={22} speed={105} /></span>
@@ -156,13 +223,22 @@ export function Demo() {
           >
             GitHub ↗
           </a>
+          <label className="theme-toggle">
+            <input
+              type="checkbox"
+              data-theme-toggle=""
+              checked={theme === 'light'}
+              onChange={(e) => setTheme(e.target.checked ? 'light' : 'dark')}
+            />
+            Light
+          </label>
         </div>
       </header>
 
       <div className="playground-layout" style={{ display: 'flex', alignItems: 'flex-start', gap: '2rem' }}>
         {/* Sidebar */}
         <aside style={{
-          width: 220,
+          width: 280,
           flexShrink: 0,
           position: 'sticky',
           top: 0,
@@ -184,22 +260,30 @@ export function Demo() {
           <section style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
             <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
               <span>Size: {size}px</span>
-              <input type="range" min={8} max={128} value={size} onChange={(e) => setSize(Number(e.target.value))} />
+              <input type="range" data-control="size" min={8} max={128} value={size} onChange={(e) => setSize(Number(e.target.value))} />
             </label>
             <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
               <span>Speed: {speed}ms/tick</span>
-              <input type="range" min={30} max={150} step={1} value={speed} onChange={(e) => setSpeed(Number(e.target.value))} />
+              <input type="range" data-control="speed" min={30} max={150} step={1} value={speed} onChange={(e) => setSpeed(Number(e.target.value))} />
             </label>
             <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
-              <input type="checkbox" checked={active} onChange={(e) => setActive(e.target.checked)} />
+              <input type="checkbox" data-control="active" checked={active} onChange={(e) => setActive(e.target.checked)} />
               Active
             </label>
             <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
-              <input type="checkbox" checked={ledMode} onChange={(e) => setLedMode(e.target.checked)} />
+              <input
+                type="checkbox"
+                data-control="led"
+                checked={ledMode}
+                onChange={(e) => {
+                  setColorTouched(true)
+                  setLedMode(e.target.checked)
+                }}
+              />
               LED matrix mode
             </label>
             <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
-              <input type="checkbox" checked={dotMode} onChange={(e) => setDotMode(e.target.checked)} />
+              <input type="checkbox" data-control="shape" checked={dotMode} onChange={(e) => setDotMode(e.target.checked)} />
               Dot shape (lite brite)
             </label>
             {dotMode && (
@@ -210,19 +294,38 @@ export function Demo() {
             )}
             <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
               <span>{ledMode ? 'Lit color' : 'Sprite color'}</span>
-              <input type="color" value={primaryColor} onChange={(e) => setPrimaryColor(e.target.value)} />
+              <input
+                type="color"
+                data-color-primary=""
+                value={primaryColor}
+                onChange={(e) => {
+                  setColorTouched(true)
+                  setPrimaryColor(e.target.value)
+                }}
+              />
             </label>
             {ledMode && (
                 <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                   <span>Dim color</span>
-                  <input type="color" value={dimColor} onChange={(e) => setDimColor(e.target.value)} />
+                  <input
+                    type="color"
+                    data-color-dim=""
+                    value={dimColor}
+                    onChange={(e) => {
+                      setColorTouched(true)
+                      setDimColor(e.target.value)
+                    }}
+                  />
                 </label>
             )}
             <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
               <span>Lock variant</span>
               <select
                 value={lockedVariant ?? ''}
-                onChange={(e) => setLockedVariant((e.target.value as VariantName) || undefined)}
+                onChange={(e) => {
+                  setSnippetFocus('thinking')
+                  setLockedVariant((e.target.value as VariantName) || undefined)
+                }}
                 style={{ background: '#1a1a1a', border: '1px solid #333', color: '#e0e0e0', padding: '4px 6px', fontFamily: 'monospace', borderRadius: 4 }}
               >
                 <option value="">— cycle —</option>
@@ -240,65 +343,29 @@ export function Demo() {
                 Code
               </span>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                <pre style={{
-                  background: '#1a1a1a',
-                  border: '1px solid #333',
-                  borderRadius: 4,
-                  padding: '8px 10px',
-                  fontSize: '0.7rem',
-                  overflowX: 'auto',
-                  margin: 0,
-                }}>
-                  {thinkingSnippet}
-                </pre>
-                <button
-                  onClick={() => copyWithFeedback(thinkingSnippet, setCopiedThinking)}
-                  style={{
-                    alignSelf: 'flex-start',
-                    background: 'none',
-                    border: '1px solid #333',
-                    borderRadius: 4,
-                    padding: '2px 8px',
-                    color: '#888',
-                    fontFamily: 'monospace',
-                    fontSize: '0.7rem',
-                    cursor: 'pointer',
-                  }}
-                >
-                  {copiedThinking ? '✓ copied' : 'copy'}
-                </button>
-              </div>
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                <pre style={{
-                  background: '#1a1a1a',
-                  border: '1px solid #333',
-                  borderRadius: 4,
-                  padding: '8px 10px',
-                  fontSize: '0.7rem',
-                  overflowX: 'auto',
-                  margin: 0,
-                }}>
-                  {writeSnippet}
-                </pre>
-                <button
-                  onClick={() => copyWithFeedback(writeSnippet, setCopiedWrite)}
-                  style={{
-                    alignSelf: 'flex-start',
-                    background: 'none',
-                    border: '1px solid #333',
-                    borderRadius: 4,
-                    padding: '2px 8px',
-                    color: '#888',
-                    fontFamily: 'monospace',
-                    fontSize: '0.7rem',
-                    cursor: 'pointer',
-                  }}
-                >
-                  {copiedWrite ? '✓ copied' : 'copy'}
-                </button>
-              </div>
+              {snippetFocus === 'status' ? (
+                <SnippetBlock
+                  kind="status"
+                  text={statusSnippet}
+                  copied={copiedStatus}
+                  onCopy={() => copyWithFeedback(statusSnippet, setCopiedStatus)}
+                />
+              ) : (
+                <>
+                  <SnippetBlock
+                    kind="thinking"
+                    text={thinkingSnippet}
+                    copied={copiedThinking}
+                    onCopy={() => copyWithFeedback(thinkingSnippet, setCopiedThinking)}
+                  />
+                  <SnippetBlock
+                    kind="write"
+                    text={writeSnippet}
+                    copied={copiedWrite}
+                    onCopy={() => copyWithFeedback(writeSnippet, setCopiedWrite)}
+                  />
+                </>
+              )}
             </div>
           </section>
         </aside>
@@ -306,7 +373,7 @@ export function Demo() {
         {/* Main content */}
         <main style={{ flex: 1, minWidth: 0 }}>
           {/* Live preview */}
-          <section style={{ marginBottom: '2rem' }}>
+          <section style={{ marginBottom: '2rem' }} onClick={() => setSnippetFocus('thinking')}>
             <h2 style={{ fontSize: '1rem', marginBottom: '1rem' }}>Preview</h2>
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
               <ThinkingSprite
@@ -316,7 +383,7 @@ export function Demo() {
                 color={color}
                 variant={lockedVariant}
                 variants={subsetArray}
-                shape={dotMode ? 'dot' : 'square'}
+                shape={shape}
                 dotRadius={dotRadius}
               />
               <span style={{ color: '#888', fontSize: '0.85rem' }}>
@@ -324,6 +391,17 @@ export function Demo() {
               </span>
             </div>
           </section>
+
+          <StatusSetDemo
+            size={size}
+            speed={speed}
+            active={active}
+            color={statusColor}
+            shape={shape}
+            dotRadius={dotRadius}
+            selected={snippetFocus === 'status' ? statusVariant : undefined}
+            onSelect={selectStatus}
+          />
 
           {/* All variants grid */}
           <section style={{ marginBottom: '2rem' }}>
@@ -343,7 +421,10 @@ export function Demo() {
                     cursor: 'pointer',
                     border: lockedVariant === name ? '1px solid #00ff88' : '1px solid #222',
                   }}
-                  onClick={() => setLockedVariant(lockedVariant === name ? undefined : name)}
+                  onClick={() => {
+                    setSnippetFocus('thinking')
+                    setLockedVariant(lockedVariant === name ? undefined : name)
+                  }}
                 >
                   <ThinkingSprite
                     size={32}
@@ -351,7 +432,7 @@ export function Demo() {
                     active={active}
                     color={color}
                     variant={name}
-                    shape={dotMode ? 'dot' : 'square'}
+                    shape={shape}
                     dotRadius={dotRadius}
                   />
                   <span style={{ fontSize: '0.7rem', color: '#aaa' }}>{name}</span>
@@ -393,7 +474,11 @@ export function Demo() {
                   type="text"
                   maxLength={20}
                   value={writeText}
-                  onChange={(e) => setWriteText(e.target.value.toUpperCase())}
+                  onFocus={() => setSnippetFocus('write')}
+                  onChange={(e) => {
+                    setSnippetFocus('write')
+                    setWriteText(e.target.value.toUpperCase())
+                  }}
                   style={{
                     background: '#1a1a1a',
                     border: '1px solid #333',
@@ -407,7 +492,7 @@ export function Demo() {
                 />
               </label>
               <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                <WriteSprite text={writeText} size={size} speed={speed} active={active} color={color} shape={dotMode ? 'dot' : 'square'} dotRadius={dotRadius} />
+                <WriteSprite text={writeText} size={size} speed={speed} active={active} color={color} shape={shape} dotRadius={dotRadius} />
                 <span style={{ color: '#888', fontSize: '0.85rem' }}>
                   {writeText.replace(/[^A-Z0-9 !?.]/g, '').length} chars · ~{(writeText.replace(/[^A-Z0-9 !?.]/g, '').length * 2.2).toFixed(1)}s per cycle
                 </span>
@@ -423,10 +508,10 @@ export function Demo() {
             </p>
             <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
               {(['EKG', 'DNA', 'Pulse'] as VariantName[]).map((name) => (
-                <ThinkingSprite key={name} size={24} speed={speed} active={active} color={color} variant={name} shape={dotMode ? 'dot' : 'square'} dotRadius={dotRadius} />
+                <ThinkingSprite key={name} size={24} speed={speed} active={active} color={color} variant={name} shape={shape} dotRadius={dotRadius} />
               ))}
               <span style={{ color: '#555', fontSize: '0.8rem' }}>← locked (no tab stop)</span>
-              <ThinkingSprite size={24} speed={speed} active={active} color={color} shape={dotMode ? 'dot' : 'square'} dotRadius={dotRadius} />
+              <ThinkingSprite size={24} speed={speed} active={active} color={color} shape={shape} dotRadius={dotRadius} />
               <span style={{ color: '#555', fontSize: '0.8rem' }}>← interactive (tab stop)</span>
             </div>
           </section>

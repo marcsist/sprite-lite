@@ -124,12 +124,64 @@ When `color` is a tuple, all 64 grid cells render — dim for unlit, primary for
 
 <!-- Screenshot placeholder -->
 
+## 3×3 status set
+
+Quiet status lights on a 3×3 LED grid. Five fixed states, named for what they mean. Use at 12–20px in product chrome; keep the 8×8 `ThinkingSprite` for larger, characterful moments.
+
+```tsx
+import { StatusSprite, type StatusVariant } from 'sprite-lite'
+
+<StatusSprite
+  variant="Think"
+  size={16}
+  color={['#141414', '#d6d6d6']}
+/>
+```
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `variant` | `StatusVariant` | — | `'Wait' \| 'Think' \| 'Work' \| 'Sync' \| 'Ready'` (required). |
+| `size` | `number` | `16` | Side length in px. SVG viewBox stays 3×3. |
+| `color` | `string \| [string, string]` | `currentColor` | Same contract as ThinkingSprite: a string for the lit layer only, or `[lit, dim]` for LED matrix mode. |
+| `shape` | `'dot' \| 'square'` | `'dot'` | Dot is the recommended look. Square is an inset rect (`x+0.14`, size `0.72`, `rx 0.1`), never full-cell. |
+| `dotRadius` | `number` | `0.32` | Dot radius in cell units, clamped to 0.26–0.38. |
+| `active` | `boolean` | `true` | When `false`, freeze on the variant's resting frame. |
+| `speed` | `number` | `90` | Milliseconds per animation tick, same feel as ThinkingSprite. Scales the variant's loop including rests. Lower = faster. Ignored when `duration` is set. |
+| `duration` | `number` | per variant | Milliseconds per loop, including rests. Defaults: Wait 2400, Think 880, Work 980, Sync 1600. Ready is static. Wins over `speed`. |
+| `label` | `string` | per variant | `aria-label`. Defaults: Waiting, Thinking, Working, Syncing, Ready. |
+
+Always `role="img"`. No click-cycling. Both `active={false}` and `prefers-reduced-motion: reduce` show that variant's defined resting frame — the state stays visible.
+
+Neutral LED tuples: light `['#141414', '#d6d6d6']`, dark `['#ededed', '#3a3a3a']`. Don't tie hue to state; position and motion carry the meaning.
+
+### Coexistence with the 8×8 set
+
+| | `ThinkingSprite` (8×8) | `StatusSprite` (3×3) |
+|---|---|---|
+| Role | Expressive and characterful: marketing, hero moments, share images | Quiet status in product chrome |
+| Sizes | 24 and up | 12–20 |
+| Variants | 55, cycling allowed | 5 fixed states, no cycling |
+| Pixels | Binary | 4 levels, crossfaded |
+| Shape | `square` default, `dot` optional | `dot` default, inset `square` optional |
+| Shared | `size`, `color` (string or tuple), `shape`, `active`, `speed` | same (`duration` is 3×3-only) |
+
+`StatusVariant` is its own type, so names do not collide with the 8×8 set. Existing 8×8 variants are unchanged.
+
+### Frames
+
+Every frame, on light and on dark:
+
+![3×3 status frames on a light background](docs/status-frames-light.png)
+
+![3×3 status frames on a dark background](docs/status-frames-dark.png)
+
 ## TypeScript
 
 `VariantName` is exported for autocomplete and type safety:
 
 ```tsx
-import { ThinkingSprite, WriteSprite, type VariantName } from 'sprite-lite'
+import { ThinkingSprite, WriteSprite, StatusSprite, type VariantName, type StatusVariant } from 'sprite-lite'
 
 const myVariant: VariantName = 'DNA' // autocompletes all 55 names
+const status: StatusVariant = 'Think'
 ```

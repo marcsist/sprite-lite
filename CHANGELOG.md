@@ -2,6 +2,18 @@
 
 All notable changes to sprite-lite are documented here.
 
+## [Unreleased]
+
+### Added
+- `StatusSprite` — a 3×3 LED status set with five fixed states: Wait, Think, Work, Sync, Ready
+- `StatusVariant` type, exported next to `ThinkingSprite`
+- Unit tests for frame tables, resting frames, reduced motion, colour modes, square geometry, aria labels, snippet output and speed scaling
+- `speed` on `StatusSprite` — same default (90) and feel as ThinkingSprite; scales each variant loop including rests. `duration` still wins when set.
+
+### Changed
+- Demo 3×3 section sits on the page theme like the 8×8 set: one row of five states, driven by the playground controls, with the CODE snippet switching to `<StatusSprite />` when a state is selected.
+- Demo 3×3 row includes a looping chat-status fragment after the five states. It follows the playground controls, is not selectable, and does not change the CODE snippet.
+
 ## [0.1.1] - 2026-04-13
 
 ### Added
