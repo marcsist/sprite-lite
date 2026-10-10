@@ -1,4 +1,4 @@
-import { act, cleanup, fireEvent, render } from '@testing-library/react'
+import { act, cleanup, render } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { StatusChat } from './StatusChat'
 import { StatusSetDemo } from './StatusSetDemo'
@@ -193,24 +193,22 @@ describe('StatusChat', () => {
     expect(example.getAttribute('tabIndex')).toBeNull()
   })
 
-  it('pins the sprite at 20px even when the playground size is larger', () => {
-    const { container } = render(
-      <StatusSetDemo {...SET_LIGHTS} active selected={undefined} onSelect={() => {}} />
-    )
+  it('pins the sprite at 20px', () => {
+    const { container } = render(<StatusChat {...LIGHTS} active />)
     const fragmentSvg = container.querySelector('.status-chat-sprite svg')
     expect(fragmentSvg?.getAttribute('width')).toBe('20')
     expect(fragmentSvg?.getAttribute('height')).toBe('20')
   })
 })
 
-describe('chat example vs CODE snippet', () => {
-  it('does not change the selected StatusSprite snippet', () => {
+describe('chat example vs the 3×3 row', () => {
+  it('does not live in StatusSetDemo or touch the CODE snippet', () => {
     const onSelect = vi.fn()
-    const { getByLabelText } = render(
+    const { container } = render(
       <StatusSetDemo {...SET_LIGHTS} active selected={undefined} onSelect={onSelect} />
     )
-    fireEvent.click(getByLabelText('Chat status example'))
-    fireEvent.focus(getByLabelText('Chat status example'))
+    expect(container.querySelector('[data-chat]')).toBeNull()
+    expect(container.querySelector('#status-set [data-status-variant]')).not.toBeNull()
     expect(onSelect).not.toHaveBeenCalled()
 
     const snippet = formatSnippet(

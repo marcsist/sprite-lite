@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { ThinkingSprite } from './ThinkingSprite'
 import { WriteSprite } from './WriteSprite'
 import { StatusSetDemo } from './StatusSetDemo'
+import { StatusChat } from './StatusChat'
 import { VARIANTS, type VariantName } from './variants'
 import type { StatusVariant } from './status'
 import {
@@ -553,6 +554,24 @@ export function Demo() {
                   </p>
                 )}
               </div>
+            </div>
+          </article>
+
+          <article className="example-card">
+            <div className="example-heading">
+              <div>
+                <h3>Agent status</h3>
+                <p>A 3×3 status light in a chat thread — queued, thinking, tools, then done.</p>
+              </div>
+            </div>
+            <div className="status-chat-window">
+              <StatusChat
+                speed={90}
+                active
+                color={['#ededed', '#3a3a3a']}
+                shape="dot"
+                dotRadius={0.38}
+              />
             </div>
           </article>
 
