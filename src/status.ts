@@ -119,19 +119,23 @@ export const RESTING_FRAMES: Record<StatusVariant, number[]> = {
   Ready: [D, D, D, D, F, D, D, D, D],
 }
 
-type EaseName = 'ease-out' | 'ease-in-out'
+export type StatusEaseName = 'ease-out' | 'ease-in-out'
 
-interface MotionSpec {
+export interface StatusMotionSpec {
   duration: number
   stepMs: number
   restMs: number
   crossfade: number
-  ease: EaseName
+  ease: StatusEaseName
   /** Motion frames only; Work/Sync rest is all-dim after these. */
   frames: number[][]
 }
 
-const MOTION: Record<'Think' | 'Work' | 'Sync', MotionSpec> = {
+/**
+ * Timing for Think / Work / Sync. Frames point at `STATUS_FRAMES` so export
+ * scripts cannot drift from the live animation.
+ */
+export const STATUS_MOTION: Record<'Think' | 'Work' | 'Sync', StatusMotionSpec> = {
   Think: {
     duration: 880,
     stepMs: 110,
@@ -217,7 +221,7 @@ function motionLevels(
   elapsedMs: number,
   duration?: number
 ): number[] {
-  const spec = MOTION[variant]
+  const spec = STATUS_MOTION[variant]
   const loop = duration != null && duration > 0 ? duration : spec.duration
   const scale = loop / spec.duration
   const stepMs = spec.stepMs * scale

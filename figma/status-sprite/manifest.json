@@ -1,0 +1,983 @@
+{
+  "name": "StatusSprite",
+  "grid": {
+    "canvas": 150,
+    "cell": 50,
+    "columns": 3,
+    "rows": 3,
+    "unit": "px",
+    "naming": "Groups cell-a … cell-i (row-major). Children cell-a-dim / cell-a-lit (unique ids; Figma layer names).",
+    "note": "150×150 viewBox with 50px cells so dot r, square inset/size/rx are whole pixels (16 / 7 / 36 / 5)."
+  },
+  "cells": [
+    "cell-a",
+    "cell-b",
+    "cell-c",
+    "cell-d",
+    "cell-e",
+    "cell-f",
+    "cell-g",
+    "cell-h",
+    "cell-i"
+  ],
+  "cellOrder": "Row-major a–i, left-to-right, top-to-bottom, matching STATUS_FRAMES.",
+  "geometry": {
+    "dot": {
+      "r": 16,
+      "fromCellFraction": 0.32
+    },
+    "square": {
+      "inset": 7,
+      "size": 36,
+      "rx": 5,
+      "fromCellFraction": {
+        "inset": 0.14,
+        "size": 0.72,
+        "rx": 0.1
+      }
+    }
+  },
+  "colors": {
+    "light": {
+      "lit": "#141414",
+      "dim": "#d6d6d6",
+      "figmaVariables": {
+        "lit": "status/lit",
+        "dim": "status/dim"
+      }
+    },
+    "dark": {
+      "lit": "#ededed",
+      "dim": "#3a3a3a",
+      "figmaVariables": {
+        "lit": "status/lit",
+        "dim": "status/dim"
+      }
+    }
+  },
+  "speed": {
+    "default": 90,
+    "formula": "scaledMs = specMs * (speed / 90). Loop length and every frame hold scale the same way. An explicit duration prop replaces the whole loop length and still keeps internal hold/rest ratios."
+  },
+  "wait": {
+    "sampleCount": 8,
+    "periodMs": 2400,
+    "note": "Wait is a sine (waitCenterLevel), not the 6 glyph snapshots in STATUS_FRAMES.Wait. Exported as 8 keyframes at t = i * 2400 / 8, using the real (unquantized) center brightness."
+  },
+  "layerTree": "9 groups (cell-a … cell-i), each with dim (LED-off base) then lit (LED-on, opacity = brightness). lit is present even at opacity 0 so every frame has the same tree for Smart Animate.",
+  "states": {
+    "Wait": {
+      "loops": true,
+      "loopLengthMs": 2400,
+      "restingFrame": "rest",
+      "smartAnimate": {
+        "durationMs": 300,
+        "easing": "ease-in-out",
+        "figmaEasing": "Ease In and Out",
+        "note": "Wait is a continuous sine in code. With 8 samples, Smart Animate 300ms Ease In and Out and delay 0 between frames approximates the breath."
+      },
+      "frames": [
+        {
+          "id": "frame-01",
+          "holdMs": 300,
+          "prototypeDelayMs": 0,
+          "levels": [
+            0,
+            0,
+            0,
+            0,
+            0.15,
+            0,
+            0,
+            0,
+            0
+          ],
+          "files": {
+            "light": {
+              "dot": "light/wait/dot/frame-01.svg",
+              "square": "light/wait/square/frame-01.svg"
+            },
+            "dark": {
+              "dot": "dark/wait/dot/frame-01.svg",
+              "square": "dark/wait/square/frame-01.svg"
+            }
+          }
+        },
+        {
+          "id": "frame-02",
+          "holdMs": 300,
+          "prototypeDelayMs": 0,
+          "levels": [
+            0,
+            0,
+            0,
+            0,
+            0.2744796179957173,
+            0,
+            0,
+            0,
+            0
+          ],
+          "files": {
+            "light": {
+              "dot": "light/wait/dot/frame-02.svg",
+              "square": "light/wait/square/frame-02.svg"
+            },
+            "dark": {
+              "dot": "dark/wait/dot/frame-02.svg",
+              "square": "dark/wait/square/frame-02.svg"
+            }
+          }
+        },
+        {
+          "id": "frame-03",
+          "holdMs": 300,
+          "prototypeDelayMs": 0,
+          "levels": [
+            0,
+            0,
+            0,
+            0,
+            0.575,
+            0,
+            0,
+            0,
+            0
+          ],
+          "files": {
+            "light": {
+              "dot": "light/wait/dot/frame-03.svg",
+              "square": "light/wait/square/frame-03.svg"
+            },
+            "dark": {
+              "dot": "dark/wait/dot/frame-03.svg",
+              "square": "dark/wait/square/frame-03.svg"
+            }
+          }
+        },
+        {
+          "id": "frame-04",
+          "holdMs": 300,
+          "prototypeDelayMs": 0,
+          "levels": [
+            0,
+            0,
+            0,
+            0,
+            0.8755203820042827,
+            0,
+            0,
+            0,
+            0
+          ],
+          "files": {
+            "light": {
+              "dot": "light/wait/dot/frame-04.svg",
+              "square": "light/wait/square/frame-04.svg"
+            },
+            "dark": {
+              "dot": "dark/wait/dot/frame-04.svg",
+              "square": "dark/wait/square/frame-04.svg"
+            }
+          }
+        },
+        {
+          "id": "frame-05",
+          "holdMs": 300,
+          "prototypeDelayMs": 0,
+          "levels": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          "files": {
+            "light": {
+              "dot": "light/wait/dot/frame-05.svg",
+              "square": "light/wait/square/frame-05.svg"
+            },
+            "dark": {
+              "dot": "dark/wait/dot/frame-05.svg",
+              "square": "dark/wait/square/frame-05.svg"
+            }
+          }
+        },
+        {
+          "id": "frame-06",
+          "holdMs": 300,
+          "prototypeDelayMs": 0,
+          "levels": [
+            0,
+            0,
+            0,
+            0,
+            0.8755203820042827,
+            0,
+            0,
+            0,
+            0
+          ],
+          "files": {
+            "light": {
+              "dot": "light/wait/dot/frame-06.svg",
+              "square": "light/wait/square/frame-06.svg"
+            },
+            "dark": {
+              "dot": "dark/wait/dot/frame-06.svg",
+              "square": "dark/wait/square/frame-06.svg"
+            }
+          }
+        },
+        {
+          "id": "frame-07",
+          "holdMs": 300,
+          "prototypeDelayMs": 0,
+          "levels": [
+            0,
+            0,
+            0,
+            0,
+            0.5750000000000001,
+            0,
+            0,
+            0,
+            0
+          ],
+          "files": {
+            "light": {
+              "dot": "light/wait/dot/frame-07.svg",
+              "square": "light/wait/square/frame-07.svg"
+            },
+            "dark": {
+              "dot": "dark/wait/dot/frame-07.svg",
+              "square": "dark/wait/square/frame-07.svg"
+            }
+          }
+        },
+        {
+          "id": "frame-08",
+          "holdMs": 300,
+          "prototypeDelayMs": 0,
+          "levels": [
+            0,
+            0,
+            0,
+            0,
+            0.27447961799571735,
+            0,
+            0,
+            0,
+            0
+          ],
+          "files": {
+            "light": {
+              "dot": "light/wait/dot/frame-08.svg",
+              "square": "light/wait/square/frame-08.svg"
+            },
+            "dark": {
+              "dot": "dark/wait/dot/frame-08.svg",
+              "square": "dark/wait/square/frame-08.svg"
+            }
+          }
+        }
+      ],
+      "rest": {
+        "id": "rest",
+        "levels": [
+          0,
+          0,
+          0,
+          0,
+          0.6,
+          0,
+          0,
+          0,
+          0
+        ],
+        "files": {
+          "light": {
+            "dot": "light/wait/dot/rest.svg",
+            "square": "light/wait/square/rest.svg"
+          },
+          "dark": {
+            "dot": "dark/wait/dot/rest.svg",
+            "square": "dark/wait/square/rest.svg"
+          }
+        }
+      }
+    },
+    "Think": {
+      "loops": true,
+      "loopLengthMs": 880,
+      "restingFrame": "rest",
+      "smartAnimate": {
+        "durationMs": 90,
+        "easing": "ease-out",
+        "figmaEasing": "Ease Out",
+        "note": "Matches STATUS_MOTION.Think.crossfade (90ms) and ease (ease-out). Figma delay = holdMs − crossfade (not less than 0), then Smart Animate for the crossfade."
+      },
+      "frames": [
+        {
+          "id": "frame-01",
+          "holdMs": 110,
+          "prototypeDelayMs": 20,
+          "levels": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "files": {
+            "light": {
+              "dot": "light/think/dot/frame-01.svg",
+              "square": "light/think/square/frame-01.svg"
+            },
+            "dark": {
+              "dot": "dark/think/dot/frame-01.svg",
+              "square": "dark/think/square/frame-01.svg"
+            }
+          }
+        },
+        {
+          "id": "frame-02",
+          "holdMs": 110,
+          "prototypeDelayMs": 20,
+          "levels": [
+            0.6,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "files": {
+            "light": {
+              "dot": "light/think/dot/frame-02.svg",
+              "square": "light/think/square/frame-02.svg"
+            },
+            "dark": {
+              "dot": "dark/think/dot/frame-02.svg",
+              "square": "dark/think/square/frame-02.svg"
+            }
+          }
+        },
+        {
+          "id": "frame-03",
+          "holdMs": 110,
+          "prototypeDelayMs": 20,
+          "levels": [
+            0.3,
+            0.6,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "files": {
+            "light": {
+              "dot": "light/think/dot/frame-03.svg",
+              "square": "light/think/square/frame-03.svg"
+            },
+            "dark": {
+              "dot": "dark/think/dot/frame-03.svg",
+              "square": "dark/think/square/frame-03.svg"
+            }
+          }
+        },
+        {
+          "id": "frame-04",
+          "holdMs": 110,
+          "prototypeDelayMs": 20,
+          "levels": [
+            0,
+            0.3,
+            0.6,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          "files": {
+            "light": {
+              "dot": "light/think/dot/frame-04.svg",
+              "square": "light/think/square/frame-04.svg"
+            },
+            "dark": {
+              "dot": "dark/think/dot/frame-04.svg",
+              "square": "dark/think/square/frame-04.svg"
+            }
+          }
+        },
+        {
+          "id": "frame-05",
+          "holdMs": 110,
+          "prototypeDelayMs": 20,
+          "levels": [
+            0,
+            0,
+            0.3,
+            0,
+            0,
+            0.6,
+            0,
+            0,
+            1
+          ],
+          "files": {
+            "light": {
+              "dot": "light/think/dot/frame-05.svg",
+              "square": "light/think/square/frame-05.svg"
+            },
+            "dark": {
+              "dot": "dark/think/dot/frame-05.svg",
+              "square": "dark/think/square/frame-05.svg"
+            }
+          }
+        },
+        {
+          "id": "frame-06",
+          "holdMs": 110,
+          "prototypeDelayMs": 20,
+          "levels": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0.3,
+            0,
+            1,
+            0.6
+          ],
+          "files": {
+            "light": {
+              "dot": "light/think/dot/frame-06.svg",
+              "square": "light/think/square/frame-06.svg"
+            },
+            "dark": {
+              "dot": "dark/think/dot/frame-06.svg",
+              "square": "dark/think/square/frame-06.svg"
+            }
+          }
+        },
+        {
+          "id": "frame-07",
+          "holdMs": 110,
+          "prototypeDelayMs": 20,
+          "levels": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0.6,
+            0.3
+          ],
+          "files": {
+            "light": {
+              "dot": "light/think/dot/frame-07.svg",
+              "square": "light/think/square/frame-07.svg"
+            },
+            "dark": {
+              "dot": "dark/think/dot/frame-07.svg",
+              "square": "dark/think/square/frame-07.svg"
+            }
+          }
+        },
+        {
+          "id": "frame-08",
+          "holdMs": 110,
+          "prototypeDelayMs": 20,
+          "levels": [
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0.6,
+            0.3,
+            0
+          ],
+          "files": {
+            "light": {
+              "dot": "light/think/dot/frame-08.svg",
+              "square": "light/think/square/frame-08.svg"
+            },
+            "dark": {
+              "dot": "dark/think/dot/frame-08.svg",
+              "square": "dark/think/square/frame-08.svg"
+            }
+          }
+        }
+      ],
+      "rest": {
+        "id": "rest",
+        "levels": [
+          1,
+          0.6,
+          0.3,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "files": {
+          "light": {
+            "dot": "light/think/dot/rest.svg",
+            "square": "light/think/square/rest.svg"
+          },
+          "dark": {
+            "dot": "dark/think/dot/rest.svg",
+            "square": "dark/think/square/rest.svg"
+          }
+        }
+      }
+    },
+    "Work": {
+      "loops": true,
+      "loopLengthMs": 980,
+      "restingFrame": "rest",
+      "smartAnimate": {
+        "durationMs": 100,
+        "easing": "ease-out",
+        "figmaEasing": "Ease Out",
+        "note": "Matches STATUS_MOTION.Work.crossfade (100ms) and ease (ease-out). Figma delay = holdMs − crossfade (not less than 0), then Smart Animate for the crossfade."
+      },
+      "frames": [
+        {
+          "id": "frame-01",
+          "holdMs": 140,
+          "prototypeDelayMs": 40,
+          "levels": [
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "files": {
+            "light": {
+              "dot": "light/work/dot/frame-01.svg",
+              "square": "light/work/square/frame-01.svg"
+            },
+            "dark": {
+              "dot": "dark/work/dot/frame-01.svg",
+              "square": "dark/work/square/frame-01.svg"
+            }
+          }
+        },
+        {
+          "id": "frame-02",
+          "holdMs": 140,
+          "prototypeDelayMs": 40,
+          "levels": [
+            0,
+            0,
+            0,
+            0.6,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          "files": {
+            "light": {
+              "dot": "light/work/dot/frame-02.svg",
+              "square": "light/work/square/frame-02.svg"
+            },
+            "dark": {
+              "dot": "dark/work/dot/frame-02.svg",
+              "square": "dark/work/square/frame-02.svg"
+            }
+          }
+        },
+        {
+          "id": "frame-03",
+          "holdMs": 140,
+          "prototypeDelayMs": 40,
+          "levels": [
+            0,
+            0,
+            0,
+            0.3,
+            0.6,
+            1,
+            0,
+            0,
+            0
+          ],
+          "files": {
+            "light": {
+              "dot": "light/work/dot/frame-03.svg",
+              "square": "light/work/square/frame-03.svg"
+            },
+            "dark": {
+              "dot": "dark/work/dot/frame-03.svg",
+              "square": "dark/work/square/frame-03.svg"
+            }
+          }
+        },
+        {
+          "id": "frame-04",
+          "holdMs": 140,
+          "prototypeDelayMs": 40,
+          "levels": [
+            0,
+            0,
+            0,
+            0,
+            0.3,
+            0.6,
+            0,
+            0,
+            0
+          ],
+          "files": {
+            "light": {
+              "dot": "light/work/dot/frame-04.svg",
+              "square": "light/work/square/frame-04.svg"
+            },
+            "dark": {
+              "dot": "dark/work/dot/frame-04.svg",
+              "square": "dark/work/square/frame-04.svg"
+            }
+          }
+        },
+        {
+          "id": "frame-05",
+          "holdMs": 140,
+          "prototypeDelayMs": 40,
+          "levels": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0.3,
+            0,
+            0,
+            0
+          ],
+          "files": {
+            "light": {
+              "dot": "light/work/dot/frame-05.svg",
+              "square": "light/work/square/frame-05.svg"
+            },
+            "dark": {
+              "dot": "dark/work/dot/frame-05.svg",
+              "square": "dark/work/square/frame-05.svg"
+            }
+          }
+        },
+        {
+          "id": "frame-06",
+          "holdMs": 280,
+          "prototypeDelayMs": 180,
+          "levels": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "files": {
+            "light": {
+              "dot": "light/work/dot/frame-06.svg",
+              "square": "light/work/square/frame-06.svg"
+            },
+            "dark": {
+              "dot": "dark/work/dot/frame-06.svg",
+              "square": "dark/work/square/frame-06.svg"
+            }
+          }
+        }
+      ],
+      "rest": {
+        "id": "rest",
+        "levels": [
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        "files": {
+          "light": {
+            "dot": "light/work/dot/rest.svg",
+            "square": "light/work/square/rest.svg"
+          },
+          "dark": {
+            "dot": "dark/work/dot/rest.svg",
+            "square": "dark/work/square/rest.svg"
+          }
+        }
+      }
+    },
+    "Sync": {
+      "loops": true,
+      "loopLengthMs": 1600,
+      "restingFrame": "rest",
+      "smartAnimate": {
+        "durationMs": 140,
+        "easing": "ease-in-out",
+        "figmaEasing": "Ease In and Out",
+        "note": "Matches STATUS_MOTION.Sync.crossfade (140ms) and ease (ease-in-out). Figma delay = holdMs − crossfade (not less than 0), then Smart Animate for the crossfade."
+      },
+      "frames": [
+        {
+          "id": "frame-01",
+          "holdMs": 180,
+          "prototypeDelayMs": 40,
+          "levels": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          "files": {
+            "light": {
+              "dot": "light/sync/dot/frame-01.svg",
+              "square": "light/sync/square/frame-01.svg"
+            },
+            "dark": {
+              "dot": "dark/sync/dot/frame-01.svg",
+              "square": "dark/sync/square/frame-01.svg"
+            }
+          }
+        },
+        {
+          "id": "frame-02",
+          "holdMs": 180,
+          "prototypeDelayMs": 40,
+          "levels": [
+            0,
+            1,
+            0,
+            1,
+            0.6,
+            1,
+            0,
+            1,
+            0
+          ],
+          "files": {
+            "light": {
+              "dot": "light/sync/dot/frame-02.svg",
+              "square": "light/sync/square/frame-02.svg"
+            },
+            "dark": {
+              "dot": "dark/sync/dot/frame-02.svg",
+              "square": "dark/sync/square/frame-02.svg"
+            }
+          }
+        },
+        {
+          "id": "frame-03",
+          "holdMs": 180,
+          "prototypeDelayMs": 40,
+          "levels": [
+            0.6,
+            0.3,
+            0.6,
+            0.3,
+            0,
+            0.3,
+            0.6,
+            0.3,
+            0.6
+          ],
+          "files": {
+            "light": {
+              "dot": "light/sync/dot/frame-03.svg",
+              "square": "light/sync/square/frame-03.svg"
+            },
+            "dark": {
+              "dot": "dark/sync/dot/frame-03.svg",
+              "square": "dark/sync/square/frame-03.svg"
+            }
+          }
+        },
+        {
+          "id": "frame-04",
+          "holdMs": 180,
+          "prototypeDelayMs": 40,
+          "levels": [
+            0.3,
+            0,
+            0.3,
+            0,
+            0,
+            0,
+            0.3,
+            0,
+            0.3
+          ],
+          "files": {
+            "light": {
+              "dot": "light/sync/dot/frame-04.svg",
+              "square": "light/sync/square/frame-04.svg"
+            },
+            "dark": {
+              "dot": "dark/sync/dot/frame-04.svg",
+              "square": "dark/sync/square/frame-04.svg"
+            }
+          }
+        },
+        {
+          "id": "frame-05",
+          "holdMs": 880,
+          "prototypeDelayMs": 740,
+          "levels": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "files": {
+            "light": {
+              "dot": "light/sync/dot/frame-05.svg",
+              "square": "light/sync/square/frame-05.svg"
+            },
+            "dark": {
+              "dot": "dark/sync/dot/frame-05.svg",
+              "square": "dark/sync/square/frame-05.svg"
+            }
+          }
+        }
+      ],
+      "rest": {
+        "id": "rest",
+        "levels": [
+          0,
+          0.6,
+          0,
+          0.6,
+          0.3,
+          0.6,
+          0,
+          0.6,
+          0
+        ],
+        "files": {
+          "light": {
+            "dot": "light/sync/dot/rest.svg",
+            "square": "light/sync/square/rest.svg"
+          },
+          "dark": {
+            "dot": "dark/sync/dot/rest.svg",
+            "square": "dark/sync/square/rest.svg"
+          }
+        }
+      }
+    },
+    "Ready": {
+      "loops": false,
+      "loopLengthMs": 0,
+      "restingFrame": "rest",
+      "smartAnimate": {
+        "durationMs": 0,
+        "easing": "none",
+        "figmaEasing": "Instant",
+        "note": "Ready is a single static frame — no Smart Animate transition."
+      },
+      "frames": [
+        {
+          "id": "frame-01",
+          "holdMs": 0,
+          "prototypeDelayMs": 0,
+          "levels": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          "files": {
+            "light": {
+              "dot": "light/ready/dot/frame-01.svg",
+              "square": "light/ready/square/frame-01.svg"
+            },
+            "dark": {
+              "dot": "dark/ready/dot/frame-01.svg",
+              "square": "dark/ready/square/frame-01.svg"
+            }
+          }
+        }
+      ],
+      "rest": {
+        "id": "rest",
+        "levels": [
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        "files": {
+          "light": {
+            "dot": "light/ready/dot/rest.svg",
+            "square": "light/ready/square/rest.svg"
+          },
+          "dark": {
+            "dot": "dark/ready/dot/rest.svg",
+            "square": "dark/ready/square/rest.svg"
+          }
+        }
+      }
+    }
+  }
+}
