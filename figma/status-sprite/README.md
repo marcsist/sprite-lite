@@ -37,3 +37,15 @@ Wait is a continuous sine in code. This export uses **8 keyframes** per 2400ms c
 Other speeds: `scaledMs = specMs * (speed / 90)`. Loop length scales the same way.
 
 Wire After delay → next frame, last frame → first frame (except Ready). Use the `rest` variant when Active is off.
+
+## Code Connect
+
+The Figma component set is node `1:5550` in [the StatusSprite file](https://www.figma.com/design/kts3xQEzfCxv5CybxtKusi?node-id=1-5550). The mapping lives in `src/StatusSprite.figma.tsx` (`@figma/code-connect@1.5.3`) and is **not published yet**.
+
+To publish later (Marcs):
+
+```bash
+FIGMA_ACCESS_TOKEN=<token> npx figma connect publish
+```
+
+That command pushes snippets into Figma Dev Mode. Do not run it until you mean to. Parse locally without a token: `npx figma connect parse`.

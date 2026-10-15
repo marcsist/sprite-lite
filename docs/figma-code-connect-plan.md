@@ -1,111 +1,54 @@
-# Figma Code Connect plan (StatusSprite)
+# Figma Code Connect (StatusSprite)
 
-Plan only — do **not** add `@figma/code-connect` until the designer has published the Figma component set. This document is the mapping contract so that file (`StatusSprite.figma.tsx`) is a mechanical step later.
+The Figma component set exists, so this is the mapping contract for `src/StatusSprite.figma.tsx`. `@figma/code-connect` is a **devDependency**, pinned to **1.5.3** because CLI v2 dropped the React parser that `.figma.tsx` / `figma.connect()` needs. Snippets have **not** been published (`figma connect publish` is still for Marcs).
 
-## Two Figma components
+## File and node
 
-Keep animation frames and the published symbol separate.
+- File: https://www.figma.com/design/kts3xQEzfCxv5CybxtKusi
+- Component set: node `1:5550` → https://www.figma.com/design/kts3xQEzfCxv5CybxtKusi?node-id=1-5550
+- Doc page: node `1:5713`
 
-| Figma component | Purpose | Variants the designer needs |
-|---|---|---|
-| `StatusSprite / Frames` | Internal library. One variant per exported SVG. Prototypes Smart Animate between **Frame** values. | **State**, **Frame**, **Shape**, optional **Theme** |
-| `StatusSprite` | What engineers and Code Connect bind to. Instance size is the sprite size. Prototype (or a nested Frames instance) plays the loop. | **State**, **Shape**, **Size**, **Speed**, **LED**, **Active** |
+One component set. Animation frames live on the same set as **Frame**; Code Connect ignores Frame. There is no separate “published” vs “frames” component.
 
-Code Connect targets the published `StatusSprite` only. `StatusSprite / Frames` is a designer tool; it does not map to a React prop named `frame`.
+## Figma properties (as built)
 
-## Recommended Figma property names
+| Figma property | Type | Values | StatusSprite prop | Snippet |
+|---|---|---|---|---|
+| `State` | Variant | `Wait`, `Think`, `Work`, `Sync`, `Ready` | `variant` | Always emit (required in code). Identity map to `StatusVariant`. |
+| `Shape` | Variant | `dot`, `square` (lowercase) | `shape` | Omit `dot` (code default). Emit `shape="square"`. |
+| `Size` | Variant | `20`, `16`, `12` | `size` | Code default is **16**. Omit `16`. Emit `size={12}` / `size={20}`. |
+| `Active` | Variant (`true` / `false` strings) | not a boolean property | `active` | Omit when `true`. Emit `active={false}` when `false`. |
+| `Frame` | Variant | `1`–`8` | — | Ignore. Animation step only; `false` Active is the rest frame and only exists at Frame=1. |
 
-Use these names and types on the published component. Code Connect matches **property name** + **option label**, so changing them later means editing the mapping file.
-
-| Figma property | Figma type | Option labels / values | StatusSprite prop |
-|---|---|---|---|
-| `State` | Variant | `Wait`, `Think`, `Work`, `Sync`, `Ready` | `variant` |
-| `Shape` | Variant | `Dot`, `Square` | `shape`: `'dot'` / `'square'` |
-| `Size` | Variant | `16`, `24`, `32` | `size`: `16` / `24` / `32` |
-| `Speed` | Variant | `Default`, `Fast`, `Slow` | `speed`: `90` / `60` / `135` |
-| `LED` | Boolean | on / off (default **on**) | `color`: tuple vs single colour |
-| `Active` | Boolean | on / off (default **on**) | `active` |
-
-### Why these types
-
-Figma component properties are variant, boolean, text, or instance-swap — there is no native number field. Size and Speed are therefore labeled variants, not free numbers.
-
-- **Size** labels are the pixel values themselves (`16` / `24` / `32`) so they stay obvious. The instance can still be resized on the canvas; Code Connect should prefer the **Size** variant, and a later follow-up can map instance width if the designer drops the variant.
-- **Speed** uses words because `60` / `90` / `135` are easy to mix up with Size. Mapping: Fast = `60` (quicker than default), Default = `90`, Slow = `135` (half as fast as 60, 1.5× default). Other speeds stay a code-only `speed` / `duration` override.
-- **LED** is a boolean, not a colour picker. Colours live in Figma variables `status/lit` and `status/dim` (light `#141414` / `#d6d6d6`, dark `#ededed` / `#3a3a3a`). The boolean only chooses tuple vs single fill, which is the `color` prop’s two modes.
-- **Active** off must show the exported **rest** frame (the same glyph as `active={false}` / reduced motion), not a paused mid-loop frame.
-
-Do **not** put `duration`, `dotRadius`, or `label` on the published component for v1. They remain code overrides.
-
-## Mapping file (later)
-
-When the Figma nodes exist, add the dependency and a file next to the component:
+Default Figma instance: **Think / dot / 20 / true / 1**. That snippet is:
 
 ```tsx
-// StatusSprite.figma.tsx  (do not add until the Figma set is published)
-import figma from '@figma/code-connect'
-import { StatusSprite } from './StatusSprite'
-
-figma.connect(StatusSprite, 'FIGMA_NODE_URL', {
-  props: {
-    variant: figma.enum('State', {
-      Wait: 'Wait',
-      Think: 'Think',
-      Work: 'Work',
-      Sync: 'Sync',
-      Ready: 'Ready',
-    }),
-    shape: figma.enum('Shape', {
-      Dot: 'dot',
-      Square: 'square',
-    }),
-    size: figma.enum('Size', {
-      '16': 16,
-      '24': 24,
-      '32': 32,
-    }),
-    speed: figma.enum('Speed', {
-      Fast: 60,
-      Default: 90,
-      Slow: 135,
-    }),
-    color: figma.boolean('LED', {
-      true: ['#141414', '#d6d6d6'], // bind to status/lit, status/dim in Figma; hex is the code fallback
-      false: '#141414',
-    }),
-    active: figma.boolean('Active'),
-  },
-  example: ({ variant, shape, size, speed, color, active }) => (
-    <StatusSprite
-      variant={variant}
-      shape={shape}
-      size={size}
-      speed={speed}
-      color={color}
-      active={active}
-    />
-  ),
-})
+<StatusSprite variant="Think" size={20} color={['#141414', '#d6d6d6']} />
 ```
 
-Replace `FIGMA_NODE_URL` with the published component URL. If the designer uses variable modes for light/dark, the snippet can keep the tuple and let Figma inspect the bound variables rather than hard-coding hex.
+(`shape` and `active` omitted as defaults; `size={20}` because 20 is not the code default.)
 
-## Internal Frames component (not Code Connect)
+## Not in Figma
 
-For Smart Animate, every frame must keep the same layer tree: `cell-a` … `cell-i`, each with `cell-*-dim` then `cell-*-lit`. Variant properties:
+- **Speed** — omit. Code keeps `speed={90}`.
+- **LED** — no property. Colours are Figma variables `status/lit` and `status/dim` (Light / Dark modes).
 
-| Property | Type | Labels |
-|---|---|---|
-| `State` | Variant | `Wait`, `Think`, `Work`, `Sync`, `Ready` |
-| `Frame` | Variant | `frame-01` … plus `rest` (see `manifest.json` for how many per state) |
-| `Shape` | Variant | `Dot`, `Square` |
-| `Theme` | Variant (optional) | `Light`, `Dark` — skip if colour variables already switch both fills |
+## LED in the snippet
 
-Prototype: After delay = `prototypeDelayMs`, Smart Animate duration / easing from `states[State].smartAnimate` in `figma/status-sprite/manifest.json`. Loop last → first except Ready. `Active = false` on the published component should swap to `Frame = rest`.
+`StatusSprite` without `color` paints `currentColor` on the lit layer only — no dim base. The Figma library is always the LED pair. Code Connect therefore always passes the Light-mode hex fallback:
 
-## Out of scope until the Figma set exists
+```tsx
+color={['#141414', '#d6d6d6']}
+```
 
-- Adding `@figma/code-connect` to `package.json`
-- Creating `StatusSprite.figma.tsx`
-- Publishing the Figma library
-- Mapping `duration`, `dotRadius`, or `label`
+Dark mode is a variable mode, not a component property, so the snippet does not switch tuples. Engineers who need dark hex pass `['#ededed', '#3a3a3a']` in code.
+
+## Active = false in Dev Mode
+
+`figma.enum('Active', { true: undefined, false: false })` is the mapping, but the React parser **drops boolean `false` attributes** (it would print nothing instead of `active={false}`). Two `figma.connect` calls with `variant: { Active: 'true' | 'false' }` keep the enum and hard-code `active={false}` on the false example.
+
+## Out of scope
+
+- `duration`, `dotRadius`, `label`
+- Publishing (`npx figma connect publish`)
+- Adding Code Connect to the published npm tarball (the `.figma.tsx` file is excluded from `tsc`, the library build, and `npm pack`)

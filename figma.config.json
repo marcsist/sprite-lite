@@ -1,0 +1,13 @@
+{
+  "codeConnect": {
+    "parser": "react",
+    "include": ["src/StatusSprite.tsx", "src/StatusSprite.figma.tsx", "src/status.ts"],
+    "exclude": ["**/*.test.ts", "**/*.test.tsx", "dist/**", "node_modules/**"],
+    "importPaths": {
+      "src/*": "sprite-lite"
+    },
+    "label": "React",
+    "language": "tsx",
+    "interactiveSetupFigmaFileUrl": "https://www.figma.com/design/kts3xQEzfCxv5CybxtKusi"
+  }
+}
