@@ -74,7 +74,10 @@ figma.connect(StatusSprite, FIGMA_STATUS_SPRITE_URL, {
   imports: ["import { StatusSprite } from 'sprite-lite'"],
   props,
   example: ({ variant, shape, size }) => (
-    <StatusSprite variant={variant} shape={shape} size={size} color={['#141414', '#d6d6d6']} />
+    <>
+      {/* dark: ['#ededed', '#3a3a3a'] */}
+      <StatusSprite variant={variant} shape={shape} size={size} color={['#141414', '#d6d6d6']} />
+    </>
   ),
 })
 
@@ -83,12 +86,15 @@ figma.connect(StatusSprite, FIGMA_STATUS_SPRITE_URL, {
   imports: ["import { StatusSprite } from 'sprite-lite'"],
   props,
   example: ({ variant, shape, size }) => (
-    <StatusSprite
-      variant={variant}
-      shape={shape}
-      size={size}
-      color={['#141414', '#d6d6d6']}
-      active={false}
-    />
+    <>
+      {/* dark: ['#ededed', '#3a3a3a'] */}
+      <StatusSprite
+        variant={variant}
+        shape={shape}
+        size={size}
+        color={['#141414', '#d6d6d6']}
+        active={false}
+      />
+    </>
   ),
 })
