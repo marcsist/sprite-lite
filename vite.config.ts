@@ -15,6 +15,7 @@ export default defineConfig({
         'src/StatusSprite.tsx',
         'src/status.ts',
       ],
+      exclude: ['**/*.figma.tsx', '**/*.test.ts', '**/*.test.tsx'],
     }),
   ],
   build: {
