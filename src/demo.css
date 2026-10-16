@@ -174,15 +174,6 @@
   .sound-bars i:nth-child(4) { height: 17px; }
 }
 
-.theme-toggle {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  font-size: 0.85rem;
-  color: #888;
-}
-
 .status-set {
   --status-tile-pad: 8px;
   --status-size: 32px;
@@ -430,25 +421,3 @@
   color: #ededed;
 }
 
-html[data-theme="light"] body {
-  background: #f4f4f4;
-  color: #1a1a1a;
-}
-
-html[data-theme="light"] .status-set-header p,
-html[data-theme="light"] .status-item-name {
-  color: #555;
-}
-
-html[data-theme="light"] .status-item.is-selected {
-  border-color: #d6d6d6;
-  background: transparent;
-}
-
-html[data-theme="light"] .status-item.is-selected .status-item-name {
-  color: #141414;
-}
-
-html[data-theme="light"] .status-item:focus-visible {
-  outline-color: #d6d6d6;
-}

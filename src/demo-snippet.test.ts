@@ -121,7 +121,7 @@ describe('StatusSprite snippet', () => {
     ).toContain('variant="Ready"')
   })
 
-  it('includes the dark theme default tuple until colour is customised', () => {
+  it('includes the default status colour tuple until colour is customised', () => {
     expect(
       formatSnippet(
         'StatusSprite',
@@ -141,7 +141,7 @@ describe('StatusSprite snippet', () => {
     )
   })
 
-  it('includes the light theme default tuple', () => {
+  it('serialises an alternate status colour tuple in snippets', () => {
     expect(
       formatSnippet(
         'StatusSprite',
