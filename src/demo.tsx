@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { ThinkingSprite } from './ThinkingSprite'
 import { WriteSprite } from './WriteSprite'
 import { StatusSetDemo } from './StatusSetDemo'
+import { StatusChat } from './StatusChat'
 import { VARIANTS, type VariantName } from './variants'
 import type { StatusVariant } from './status'
 import {
@@ -14,11 +15,9 @@ import './demo.css'
 
 const ALL_NAMES = VARIANTS.map((v) => v.name)
 
-const STATUS_LIGHT: [string, string] = ['#141414', '#d6d6d6']
 const STATUS_DARK: [string, string] = ['#ededed', '#3a3a3a']
 
 type SnippetFocus = 'thinking' | 'write' | 'status'
-type PageTheme = 'dark' | 'light'
 
 function copyWithFeedback(text: string, setCopied: (v: boolean) => void) {
   navigator.clipboard.writeText(text)
@@ -92,7 +91,6 @@ export function Demo() {
   const [primaryColor, setPrimaryColor] = useState('#00ff88')
   const [dimColor, setDimColor] = useState('#1a2a1a')
   const [colorTouched, setColorTouched] = useState(false)
-  const [theme, setTheme] = useState<PageTheme>('dark')
   const [snippetFocus, setSnippetFocus] = useState<SnippetFocus>('thinking')
   const [statusVariant, setStatusVariant] = useState<StatusVariant>('Wait')
   const [copiedStatus, setCopiedStatus] = useState(false)
@@ -101,17 +99,9 @@ export function Demo() {
     ? [primaryColor, dimColor]
     : primaryColor
 
-  const statusColor: string | [string, string] = colorTouched
-    ? color
-    : theme === 'light'
-      ? STATUS_LIGHT
-      : STATUS_DARK
+  const statusColor: string | [string, string] = colorTouched ? color : STATUS_DARK
 
   const shape = dotMode ? 'dot' : 'square'
-
-  useEffect(() => {
-    document.documentElement.dataset.theme = theme
-  }, [theme])
 
   const subsetArray: VariantName[] | undefined =
     selectedSubset.size > 0 ? [...selectedSubset] : undefined
@@ -223,15 +213,6 @@ export function Demo() {
           >
             GitHub ↗
           </a>
-          <label className="theme-toggle">
-            <input
-              type="checkbox"
-              data-theme-toggle=""
-              checked={theme === 'light'}
-              onChange={(e) => setTheme(e.target.checked ? 'light' : 'dark')}
-            />
-            Light
-          </label>
         </div>
       </header>
 
@@ -553,6 +534,24 @@ export function Demo() {
                   </p>
                 )}
               </div>
+            </div>
+          </article>
+
+          <article className="example-card">
+            <div className="example-heading">
+              <div>
+                <h3>Agent status</h3>
+                <p>A 3×3 status light in a chat thread — queued, thinking, tools, then done.</p>
+              </div>
+            </div>
+            <div className="status-chat-window">
+              <StatusChat
+                speed={90}
+                active
+                color={['#ededed', '#3a3a3a']}
+                shape="dot"
+                dotRadius={0.38}
+              />
             </div>
           </article>
 

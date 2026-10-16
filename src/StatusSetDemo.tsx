@@ -1,6 +1,5 @@
 import type { CSSProperties } from 'react'
 import { StatusSprite, type StatusVariant } from './StatusSprite'
-import { StatusChat } from './StatusChat'
 import { STATUS_VARIANTS } from './status'
 
 export function StatusSetDemo({
@@ -58,13 +57,6 @@ export function StatusSetDemo({
             </button>
           ))}
         </div>
-        <StatusChat
-          speed={speed}
-          active={active}
-          color={color}
-          shape={shape}
-          dotRadius={dotRadius}
-        />
       </div>
     </section>
   )
