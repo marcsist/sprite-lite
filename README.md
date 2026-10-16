@@ -112,7 +112,7 @@ Spells out text letter by letter using a built-in 3×5 pixel font. Supports A–
 
 ## LED matrix mode
 
-When `color` is a tuple, all 64 grid cells render — dim for unlit, primary for lit. This gives a classic LED display effect.
+When `color` is a tuple, all 64 grid cells render — dim base plus a lit layer whose opacity follows each variant’s half-tone spec (trails, column stacks, rings). Single-colour mode stays binary on/off.
 
 ```tsx
 <ThinkingSprite
