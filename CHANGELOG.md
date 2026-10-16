@@ -5,6 +5,7 @@ All notable changes to sprite-lite are documented here.
 ## [Unreleased]
 
 ### Added
+- ThinkingSprite half-tone motion in LED matrix mode (`color={[primary, dim]}`): each variant declares a compositor (`listOrder`, `columnStack`, `radialRing`, or `full`) so trails and stacks use StatusSprite-style brightness steps on the lit layer.
 - `StatusSprite` — a 3×3 LED status set with five fixed states: Wait, Think, Work, Sync, Ready
 - `StatusVariant` type, exported next to `ThinkingSprite`
 - Unit tests for frame tables, resting frames, reduced motion, colour modes, square geometry, aria labels, snippet output and speed scaling

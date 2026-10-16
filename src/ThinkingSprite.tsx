@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { VARIANTS, type VariantName, type Pixels } from './variants'
+import { composeLevels } from './pixel-levels'
+import { VARIANTS, type VariantDef, type VariantName, type Pixels } from './variants'
 
 const ALL_VARIANT_NAMES = VARIANTS.map((v) => v.name)
 
@@ -59,7 +60,7 @@ export function ThinkingSprite({
   const pool = variant === undefined ? resolvePool(variants) : null
 
   // Resolve which variant entry to render
-  let entry: { name: VariantName; render: (tick: number) => Pixels }
+  let entry: VariantDef
   if (variant !== undefined) {
     entry = resolveVariant(variant)
   } else {
@@ -67,12 +68,9 @@ export function ThinkingSprite({
     entry = poolEntry ?? VARIANTS[0]
   }
 
-  const { name, render } = entry
+  const { name, render, halftone } = entry
   const litPixels = render(tick)
-
-  // Flat Uint8Array lookup — avoids per-tick string allocation
-  const litMap = new Uint8Array(64)
-  for (const [x, y] of litPixels) litMap[y * 8 + x] = 1
+  const levelGrid = composeLevels(litPixels, halftone)
 
   // Color resolution
   const isLedMode = Array.isArray(color) && color.length >= 2
@@ -121,26 +119,37 @@ export function ThinkingSprite({
     >
       <title>{name}</title>
       {isLedMode
-        ? ALL_CELLS.map(([x, y]) =>
-            shape === 'dot' ? (
-              <circle
-                key={`${x},${y}`}
-                cx={x + 0.5}
-                cy={y + 0.5}
-                r={dotRadius}
-                fill={litMap[y * 8 + x] ? primaryColor : dimColor}
-              />
+        ? ALL_CELLS.map(([x, y]) => {
+            const level = levelGrid[y * 8 + x]
+            return shape === 'dot' ? (
+              <g key={`${x},${y}`}>
+                <circle cx={x + 0.5} cy={y + 0.5} r={dotRadius} fill={dimColor} />
+                {level > 0 ? (
+                  <circle
+                    cx={x + 0.5}
+                    cy={y + 0.5}
+                    r={dotRadius}
+                    fill={primaryColor}
+                    fillOpacity={level}
+                  />
+                ) : null}
+              </g>
             ) : (
-              <rect
-                key={`${x},${y}`}
-                x={x}
-                y={y}
-                width={1}
-                height={1}
-                fill={litMap[y * 8 + x] ? primaryColor : dimColor}
-              />
+              <g key={`${x},${y}`}>
+                <rect x={x} y={y} width={1} height={1} fill={dimColor} />
+                {level > 0 ? (
+                  <rect
+                    x={x}
+                    y={y}
+                    width={1}
+                    height={1}
+                    fill={primaryColor}
+                    fillOpacity={level}
+                  />
+                ) : null}
+              </g>
             )
-          )
+          })
         : litPixels.map(([x, y], i) =>
             shape === 'dot' ? (
               <circle key={i} cx={x + 0.5} cy={y + 0.5} r={dotRadius} fill={primaryColor} />

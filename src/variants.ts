@@ -1,4 +1,12 @@
+import type { HalftoneSpec } from './pixel-levels'
+
 export type Pixels = Array<[number, number]>
+
+export type VariantDef = {
+  name: VariantName
+  render: (tick: number) => Pixels
+  halftone: HalftoneSpec
+}
 
 export type VariantName =
   | 'EKG' | 'Rain' | 'Snake' | 'Bounce' | 'Sine' | 'Scan' | 'Binary' | 'Morse'
@@ -951,8 +959,59 @@ function renderGrow(tick: number): Pixels {
   return pixels
 }
 
-// ── Variant registry ──────────────────────────────────────────────────────
-export const VARIANTS: Array<{ name: VariantName; render: (tick: number) => Pixels }> = [
+// ── Per-variant half-tone compositor (LED tuple mode in ThinkingSprite) ───
+const HALFTONE_DEFAULT: HalftoneSpec = { mode: 'full' }
+
+const HALFTONE: Partial<Record<VariantName, HalftoneSpec>> = {
+  EKG: { mode: 'listOrder' },
+  Rain: { mode: 'listOrder' },
+  Snake: { mode: 'listOrder' },
+  Bounce: { mode: 'listOrder' },
+  Sine: { mode: 'listOrder' },
+  Scan: { mode: 'listOrder' },
+  Weave: { mode: 'listOrder' },
+  Spark: { mode: 'listOrder' },
+  Spiral: { mode: 'listOrder' },
+  DNA: { mode: 'listOrder' },
+  Pendulum: { mode: 'listOrder' },
+  Orbit: { mode: 'listOrder' },
+  Stairs: { mode: 'listOrder' },
+  Firefly: { mode: 'listOrder' },
+  Drip: { mode: 'listOrder' },
+  Bubble: { mode: 'listOrder' },
+  Worm: { mode: 'listOrder' },
+  Pac: { mode: 'listOrder' },
+  Pong: { mode: 'listOrder' },
+  Neko: { mode: 'listOrder' },
+  Neural: { mode: 'listOrder' },
+  Arc: { mode: 'listOrder' },
+  Cursor: { mode: 'listOrder' },
+  Wave: { mode: 'listOrder' },
+  VoiceWaveform: { mode: 'listOrder' },
+  Bars: { mode: 'columnStack' },
+  Binary: { mode: 'columnStack' },
+  Signal: { mode: 'columnStack' },
+  Loader: { mode: 'columnStack' },
+  Step: { mode: 'columnStack' },
+  Grow: { mode: 'columnStack' },
+  Fill: { mode: 'columnStack' },
+  Hourglass: { mode: 'columnStack' },
+  Tide: { mode: 'columnStack' },
+  Surf: { mode: 'columnStack' },
+  Aurora: { mode: 'columnStack' },
+  Flutter: { mode: 'columnStack' },
+  Pulse: { mode: 'radialRing' },
+  Ripple: { mode: 'radialRing' },
+  Radar: { mode: 'radialRing' },
+  Breath: { mode: 'radialRing' },
+  Bloom: { mode: 'radialRing' },
+  Focus: { mode: 'radialRing' },
+  Campfire: { mode: 'radialRing' },
+  Spin: { mode: 'radialRing' },
+  Cog: { mode: 'radialRing' },
+}
+
+const RAW_VARIANTS: Array<{ name: VariantName; render: (tick: number) => Pixels }> = [
   { name: 'EKG',      render: renderEkg      },
   { name: 'Rain',     render: renderRain     },
   { name: 'Snake',    render: renderSnake    },
@@ -1010,3 +1069,9 @@ export const VARIANTS: Array<{ name: VariantName; render: (tick: number) => Pixe
   { name: 'Fill',   render: renderFill   },
   { name: 'Grow',   render: renderGrow   },
 ]
+
+export const VARIANTS: VariantDef[] = RAW_VARIANTS.map(({ name, render }) => ({
+  name,
+  render,
+  halftone: HALFTONE[name] ?? HALFTONE_DEFAULT,
+}))
