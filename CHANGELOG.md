@@ -4,6 +4,8 @@ All notable changes to sprite-lite are documented here.
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-19
+
 ### Added
 - `StatusSprite` — a 3×3 LED status set with five fixed states: Wait, Think, Work, Sync, Ready
 - `StatusVariant` type, exported next to `ThinkingSprite`
