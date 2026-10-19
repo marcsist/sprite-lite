@@ -1,6 +1,6 @@
 # sprite-lite
 
-Zero-dependency 8×8 pixel-art animation component for React.
+Zero-dependency React pixel sprites: 8×8 ThinkingSprite animations and a 3×3 StatusSprite LED status set.
 
 ## Quick start
 
