@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 150 150" fill="none">
+  <g id="cell-a">
+    <circle id="cell-a-dim" cx="25" cy="25" r="16" fill="#3a3a3a"/>
+    <circle id="cell-a-lit" cx="25" cy="25" r="16" fill="#ededed" opacity="0"/>
+  </g>
+  <g id="cell-b">
+    <circle id="cell-b-dim" cx="75" cy="25" r="16" fill="#3a3a3a"/>
+    <circle id="cell-b-lit" cx="75" cy="25" r="16" fill="#ededed" opacity="0.3"/>
+  </g>
+  <g id="cell-c">
+    <circle id="cell-c-dim" cx="125" cy="25" r="16" fill="#3a3a3a"/>
+    <circle id="cell-c-lit" cx="125" cy="25" r="16" fill="#ededed" opacity="0.6"/>
+  </g>
+  <g id="cell-d">
+    <circle id="cell-d-dim" cx="25" cy="75" r="16" fill="#3a3a3a"/>
+    <circle id="cell-d-lit" cx="25" cy="75" r="16" fill="#ededed" opacity="0"/>
+  </g>
+  <g id="cell-e">
+    <circle id="cell-e-dim" cx="75" cy="75" r="16" fill="#3a3a3a"/>
+    <circle id="cell-e-lit" cx="75" cy="75" r="16" fill="#ededed" opacity="0"/>
+  </g>
+  <g id="cell-f">
+    <circle id="cell-f-dim" cx="125" cy="75" r="16" fill="#3a3a3a"/>
+    <circle id="cell-f-lit" cx="125" cy="75" r="16" fill="#ededed" opacity="1"/>
+  </g>
+  <g id="cell-g">
+    <circle id="cell-g-dim" cx="25" cy="125" r="16" fill="#3a3a3a"/>
+    <circle id="cell-g-lit" cx="25" cy="125" r="16" fill="#ededed" opacity="0"/>
+  </g>
+  <g id="cell-h">
+    <circle id="cell-h-dim" cx="75" cy="125" r="16" fill="#3a3a3a"/>
+    <circle id="cell-h-lit" cx="75" cy="125" r="16" fill="#ededed" opacity="0"/>
+  </g>
+  <g id="cell-i">
+    <circle id="cell-i-dim" cx="125" cy="125" r="16" fill="#3a3a3a"/>
+    <circle id="cell-i-lit" cx="125" cy="125" r="16" fill="#ededed" opacity="0"/>
+  </g>
+</svg>

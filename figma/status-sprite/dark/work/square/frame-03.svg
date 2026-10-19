@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 150 150" fill="none">
+  <g id="cell-a">
+    <rect id="cell-a-dim" x="7" y="7" width="36" height="36" rx="5" fill="#3a3a3a"/>
+    <rect id="cell-a-lit" x="7" y="7" width="36" height="36" rx="5" fill="#ededed" opacity="0"/>
+  </g>
+  <g id="cell-b">
+    <rect id="cell-b-dim" x="57" y="7" width="36" height="36" rx="5" fill="#3a3a3a"/>
+    <rect id="cell-b-lit" x="57" y="7" width="36" height="36" rx="5" fill="#ededed" opacity="0"/>
+  </g>
+  <g id="cell-c">
+    <rect id="cell-c-dim" x="107" y="7" width="36" height="36" rx="5" fill="#3a3a3a"/>
+    <rect id="cell-c-lit" x="107" y="7" width="36" height="36" rx="5" fill="#ededed" opacity="0"/>
+  </g>
+  <g id="cell-d">
+    <rect id="cell-d-dim" x="7" y="57" width="36" height="36" rx="5" fill="#3a3a3a"/>
+    <rect id="cell-d-lit" x="7" y="57" width="36" height="36" rx="5" fill="#ededed" opacity="0.3"/>
+  </g>
+  <g id="cell-e">
+    <rect id="cell-e-dim" x="57" y="57" width="36" height="36" rx="5" fill="#3a3a3a"/>
+    <rect id="cell-e-lit" x="57" y="57" width="36" height="36" rx="5" fill="#ededed" opacity="0.6"/>
+  </g>
+  <g id="cell-f">
+    <rect id="cell-f-dim" x="107" y="57" width="36" height="36" rx="5" fill="#3a3a3a"/>
+    <rect id="cell-f-lit" x="107" y="57" width="36" height="36" rx="5" fill="#ededed" opacity="1"/>
+  </g>
+  <g id="cell-g">
+    <rect id="cell-g-dim" x="7" y="107" width="36" height="36" rx="5" fill="#3a3a3a"/>
+    <rect id="cell-g-lit" x="7" y="107" width="36" height="36" rx="5" fill="#ededed" opacity="0"/>
+  </g>
+  <g id="cell-h">
+    <rect id="cell-h-dim" x="57" y="107" width="36" height="36" rx="5" fill="#3a3a3a"/>
+    <rect id="cell-h-lit" x="57" y="107" width="36" height="36" rx="5" fill="#ededed" opacity="0"/>
+  </g>
+  <g id="cell-i">
+    <rect id="cell-i-dim" x="107" y="107" width="36" height="36" rx="5" fill="#3a3a3a"/>
+    <rect id="cell-i-lit" x="107" y="107" width="36" height="36" rx="5" fill="#ededed" opacity="0"/>
+  </g>
+</svg>
