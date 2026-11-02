@@ -17,6 +17,16 @@ describe('formatSnippet', () => {
     ).toBe('<ThinkingSprite />')
   })
 
+  it('emits variant as the animation to play and never a variants list', () => {
+    const snippet = formatSnippet(
+      'ThinkingSprite',
+      { size: 16, speed: 90, active: true, variant: 'DNA', shape: 'square', dotRadius: 0.38 },
+      THINKING_DEFAULTS
+    )
+    expect(snippet).toBe(`<ThinkingSprite\n  variant="DNA"\n/>`)
+    expect(snippet).not.toContain('variants')
+  })
+
   it('emits WriteSprite text when it differs', () => {
     expect(
       formatSnippet(

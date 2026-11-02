@@ -5,14 +5,11 @@ Zero-dependency 8×8 pixel-art animation component for React.
 ## Quick start
 
 ```tsx
-// Bare — cycles all 55 variants on click
+// Plays EKG, the default animation
 <ThinkingSprite />
 
-// Fixed variant — no cycling
+// Choose which animation to play
 <ThinkingSprite variant="DNA" />
-
-// Subset cycling — cycles only these three on click/Enter/Space
-<ThinkingSprite variants={["EKG", "DNA", "Pulse"]} />
 
 // LED matrix mode — dim background + lit color
 <ThinkingSprite variant="DNA" color={["#00ff88", "#1a2a1a"]} size={48} />
@@ -29,8 +26,7 @@ Zero-dependency 8×8 pixel-art animation component for React.
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `size` | `number` | `16` | Side length in px. SVG scales to any size; viewBox stays 8×8. |
-| `variant` | `VariantName` | — | Lock to a single variant. Disables cycling when set. |
-| `variants` | `VariantName[]` | — | Subset to cycle through. Ignored when `variant` is set. |
+| `variant` | `VariantName` | — | Animation to play. When omitted, plays EKG. |
 | `active` | `boolean` | `true` | When `false`, animation freezes on the current frame. |
 | `color` | `string \| [string, string]` | `currentColor` | Single color for lit pixels, or `[primary, dim]` for LED matrix mode. |
 | `speed` | `number` | `90` | Milliseconds per animation tick. Lower = faster. |
@@ -160,7 +156,7 @@ Neutral LED tuples: light `['#141414', '#d6d6d6']`, dark `['#ededed', '#3a3a3a']
 |---|---|---|
 | Role | Expressive and characterful: marketing, hero moments, share images | Quiet status in product chrome |
 | Sizes | 24 and up | 12–20 |
-| Variants | 55, cycling allowed | 5 fixed states, no cycling |
+| Variants | 55 named animations | 5 fixed states |
 | Pixels | Binary | 4 levels, crossfaded |
 | Shape | `square` default, `dot` optional | `dot` default, inset `square` optional |
 | Shared | `size`, `color` (string or tuple), `shape`, `active`, `speed` | same (`duration` is 3×3-only) |

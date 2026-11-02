@@ -3,7 +3,7 @@ import { ThinkingSprite } from './ThinkingSprite'
 import { WriteSprite } from './WriteSprite'
 import { StatusSetDemo } from './StatusSetDemo'
 import { StatusChat } from './StatusChat'
-import { VARIANTS, type VariantName } from './variants'
+import { VARIANTS } from './variants'
 import type { StatusVariant } from './status'
 import {
   formatSnippet,
@@ -84,8 +84,6 @@ export function Demo() {
   const [speed, setSpeed] = useState(90)
   const [active, setActive] = useState(true)
   const [ledMode, setLedMode] = useState(false)
-  const [lockedVariant, setLockedVariant] = useState<VariantName | undefined>(undefined)
-  const [selectedSubset, setSelectedSubset] = useState<Set<VariantName>>(new Set())
   const [dotMode, setDotMode] = useState(true)
   const [dotRadius, setDotRadius] = useState(0.38)
   const [primaryColor, setPrimaryColor] = useState('#00ff88')
@@ -103,9 +101,6 @@ export function Demo() {
 
   const shape = dotMode ? 'dot' : 'square'
 
-  const subsetArray: VariantName[] | undefined =
-    selectedSubset.size > 0 ? [...selectedSubset] : undefined
-
   const thinkingSnippet = formatSnippet(
     'ThinkingSprite',
     {
@@ -113,8 +108,6 @@ export function Demo() {
       speed,
       active,
       color,
-      variant: lockedVariant,
-      variants: subsetArray,
       shape,
       dotRadius,
     },
@@ -152,14 +145,6 @@ export function Demo() {
   function selectStatus(variant: StatusVariant) {
     setStatusVariant(variant)
     setSnippetFocus('status')
-  }
-
-  function toggleSubset(name: VariantName) {
-    setSelectedSubset((prev) => {
-      const next = new Set(prev)
-      next.has(name) ? next.delete(name) : next.add(name)
-      return next
-    })
   }
 
   return (
@@ -299,21 +284,6 @@ export function Demo() {
                   />
                 </label>
             )}
-            <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-              <span>Lock variant</span>
-              <select
-                value={lockedVariant ?? ''}
-                onChange={(e) => {
-                  setSnippetFocus('thinking')
-                  setLockedVariant((e.target.value as VariantName) || undefined)
-                }}
-                style={{ background: '#1a1a1a', border: '1px solid #333', color: '#e0e0e0', padding: '4px 6px', fontFamily: 'monospace', borderRadius: 4 }}
-              >
-                <option value="">— cycle —</option>
-                {ALL_NAMES.map((n) => <option key={n} value={n}>{n}</option>)}
-              </select>
-            </label>
-
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               <span style={{
                 fontSize: '0.7rem',
@@ -362,14 +332,10 @@ export function Demo() {
                 speed={speed}
                 active={active}
                 color={color}
-                variant={lockedVariant}
-                variants={subsetArray}
                 shape={shape}
                 dotRadius={dotRadius}
               />
-              <span style={{ color: '#888', fontSize: '0.85rem' }}>
-                {lockedVariant ? `locked: ${lockedVariant}` : subsetArray ? `cycling: ${subsetArray.join(', ')}` : `cycling all ${ALL_NAMES.length}`}
-              </span>
+              <span style={{ color: '#888', fontSize: '0.85rem' }}>EKG</span>
             </div>
           </section>
 
@@ -386,7 +352,7 @@ export function Demo() {
 
           {/* All variants grid */}
           <section style={{ marginBottom: '2rem' }}>
-            <h2 style={{ fontSize: '1rem', marginBottom: '1rem' }}>{`All ${ALL_NAMES.length} variants (click to lock)`}</h2>
+            <h2 style={{ fontSize: '1rem', marginBottom: '1rem' }}>{`All ${ALL_NAMES.length} variants.`}</h2>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(80px, 1fr))', gap: '1rem' }}>
               {ALL_NAMES.map((name) => (
                 <div
@@ -398,13 +364,7 @@ export function Demo() {
                     gap: 6,
                     padding: 8,
                     borderRadius: 8,
-                    background: lockedVariant === name ? '#1a1a2e' : 'transparent',
-                    cursor: 'pointer',
-                    border: lockedVariant === name ? '1px solid #00ff88' : '1px solid #222',
-                  }}
-                  onClick={() => {
-                    setSnippetFocus('thinking')
-                    setLockedVariant(lockedVariant === name ? undefined : name)
+                    border: '1px solid #222',
                   }}
                 >
                   <ThinkingSprite
@@ -418,26 +378,6 @@ export function Demo() {
                   />
                   <span style={{ fontSize: '0.7rem', color: '#aaa' }}>{name}</span>
                 </div>
-              ))}
-            </div>
-          </section>
-
-          {/* Subset cycling */}
-          <section style={{ marginBottom: '2rem' }}>
-            <h2 style={{ fontSize: '1rem', marginBottom: '0.5rem' }}>Subset cycling</h2>
-            <p style={{ color: '#888', fontSize: '0.85rem', marginBottom: '0.75rem' }}>
-              Check variants to cycle through a custom subset. Clear lock variant above first.
-            </p>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-              {ALL_NAMES.map((name) => (
-                <label key={name} style={{ display: 'flex', alignItems: 'center', gap: 4, cursor: 'pointer', fontSize: '0.85rem' }}>
-                  <input
-                    type="checkbox"
-                    checked={selectedSubset.has(name)}
-                    onChange={() => toggleSubset(name)}
-                  />
-                  {name}
-                </label>
               ))}
             </div>
           </section>
@@ -478,22 +418,6 @@ export function Demo() {
                   {writeText.replace(/[^A-Z0-9 !?.]/g, '').length} chars · ~{(writeText.replace(/[^A-Z0-9 !?.]/g, '').length * 2.2).toFixed(1)}s per cycle
                 </span>
               </div>
-            </div>
-          </section>
-
-          {/* Keyboard focus demo */}
-          <section>
-            <h2 style={{ fontSize: '1rem', marginBottom: '0.5rem' }}>Keyboard navigation</h2>
-            <p style={{ color: '#888', fontSize: '0.85rem', marginBottom: '0.75rem' }}>
-              Tab to focus, Enter or Space to cycle. Lock a variant above to make it non-interactive.
-            </p>
-            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-              {(['EKG', 'DNA', 'Pulse'] as VariantName[]).map((name) => (
-                <ThinkingSprite key={name} size={24} speed={speed} active={active} color={color} variant={name} shape={shape} dotRadius={dotRadius} />
-              ))}
-              <span style={{ color: '#555', fontSize: '0.8rem' }}>← locked (no tab stop)</span>
-              <ThinkingSprite size={24} speed={speed} active={active} color={color} shape={shape} dotRadius={dotRadius} />
-              <span style={{ color: '#555', fontSize: '0.8rem' }}>← interactive (tab stop)</span>
             </div>
           </section>
         </main>
