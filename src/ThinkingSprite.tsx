@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react'
 import { VARIANTS, type VariantName, type Pixels } from './variants'
 
-const ALL_VARIANT_NAMES = VARIANTS.map((v) => v.name)
-
 function resolveVariant(name: VariantName) {
   const found = VARIANTS.find((v) => v.name === name)
   if (!found) {
@@ -15,10 +13,8 @@ function resolveVariant(name: VariantName) {
 export interface ThinkingSpriteProps {
   /** Side length in pixels. The SVG scales to any size; viewBox stays 8×8. Default: 16 */
   size?: number
-  /** Lock to a single variant by name. Disables click/keyboard cycling when set. */
+  /** Which animation to play. When omitted, plays the first variant (EKG). */
   variant?: VariantName
-  /** Subset of variants to cycle through. Ignored when `variant` is set. Cycles all 20 when omitted. */
-  variants?: VariantName[]
   /** When false, animation freezes on the current frame at the same opacity. Default: true */
   active?: boolean
   /**
@@ -39,7 +35,6 @@ export interface ThinkingSpriteProps {
 export function ThinkingSprite({
   size = 16,
   variant,
-  variants,
   active = true,
   color,
   speed = 90,
@@ -47,7 +42,6 @@ export function ThinkingSprite({
   dotRadius = 0.38,
 }: ThinkingSpriteProps) {
   const [tick, setTick] = useState(0)
-  const [idx, setIdx] = useState(0)
 
   useEffect(() => {
     if (!active) return
@@ -55,17 +49,7 @@ export function ThinkingSprite({
     return () => clearInterval(id)
   }, [active, speed])
 
-  // Resolve pool once — used in render body and event handlers
-  const pool = variant === undefined ? resolvePool(variants) : null
-
-  // Resolve which variant entry to render
-  let entry: { name: VariantName; render: (tick: number) => Pixels }
-  if (variant !== undefined) {
-    entry = resolveVariant(variant)
-  } else {
-    const poolEntry = VARIANTS.find((v) => v.name === pool![idx % pool!.length])
-    entry = poolEntry ?? VARIANTS[0]
-  }
+  const entry = variant === undefined ? VARIANTS[0] : resolveVariant(variant)
 
   const { name, render } = entry
   const litPixels = render(tick)
@@ -83,40 +67,17 @@ export function ThinkingSprite({
       : 'currentColor'
   const dimColor = isLedMode ? (color as [string, string])[1] : undefined
 
-  const isInteractive = variant === undefined
-
-  function handleClick() {
-    if (!isInteractive) return
-    setIdx((i) => (i + 1) % pool!.length)
-  }
-
-  function handleKeyDown(e: React.KeyboardEvent) {
-    if (!isInteractive) return
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault()
-      setIdx((i) => (i + 1) % pool!.length)
-    }
-  }
-
-  const needsPadding = isInteractive && size < 36
-
   return (
     <svg
       width={size}
       height={size}
       viewBox="0 0 8 8"
-      role={isInteractive ? 'button' : 'img'}
+      role="img"
       aria-label={`${active ? 'Thinking' : 'Paused'}: ${name}`}
-      tabIndex={isInteractive ? 0 : -1}
-      onClick={isInteractive ? handleClick : undefined}
-      onKeyDown={isInteractive ? handleKeyDown : undefined}
       style={{
         imageRendering: shape === 'dot' ? undefined : 'pixelated',
         display: 'block',
         flexShrink: 0,
-        cursor: isInteractive ? 'pointer' : 'default',
-        padding: needsPadding ? '4px' : undefined,
-        boxSizing: needsPadding ? 'content-box' : undefined,
       }}
     >
       <title>{name}</title>
@@ -154,16 +115,3 @@ export function ThinkingSprite({
 
 // All 64 cells for LED matrix mode
 const ALL_CELLS: Pixels = Array.from({ length: 64 }, (_, i) => [i % 8, Math.floor(i / 8)])
-
-function resolvePool(variantNames: VariantName[] | undefined): VariantName[] {
-  if (!variantNames) return ALL_VARIANT_NAMES
-  const valid: VariantName[] = []
-  for (const name of variantNames) {
-    if (ALL_VARIANT_NAMES.includes(name)) {
-      valid.push(name)
-    } else {
-      console.warn(`[ThinkingSprite] Unknown variant "${name}" in variants array — skipping.`)
-    }
-  }
-  return valid.length > 0 ? valid : ALL_VARIANT_NAMES
-}

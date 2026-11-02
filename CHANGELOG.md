@@ -4,6 +4,9 @@ All notable changes to sprite-lite are documented here.
 
 ## [Unreleased]
 
+### Removed
+- Click cycling, the `variants` prop, and keyboard cycling on `ThinkingSprite`.
+
 ## [0.2.0] - 2026-10-19
 
 ### Added
