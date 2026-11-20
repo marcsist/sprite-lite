@@ -1,11 +1,9 @@
 import { useEffect } from 'react'
 import { ThinkingSprite } from '../ThinkingSprite'
 import type { VariantName } from '../variants'
-import { launchPath } from './routes'
+import { LaunchNav } from './nav'
 import { usePrefersReducedMotion } from './reduced'
 import './launch.css'
-
-const NAMES = 'Rain, Spark, Invader, Ghost, Tamagotchi, Campfire, Hourglass, Face'
 
 export function LaunchCast() {
   const reduced = usePrefersReducedMotion()
@@ -22,16 +20,11 @@ export function LaunchCast() {
     <div className="launch">
       <main className="cast-stage" data-launch="cast" aria-labelledby="cast-title">
         <div className="cast-copy">
-          <p className="cast-kicker">Night shift</p>
           <h1 id="cast-title">
             They keep
             <br />
             their own hours.
           </h1>
-          <p className="cast-dek">
-            Rain on the glass. A fire still going. The hours, still running.
-          </p>
-          <p className="cast-names">{NAMES}</p>
         </div>
 
         <div className="cast-room" aria-hidden="true">
@@ -52,10 +45,7 @@ export function LaunchCast() {
         </div>
       </main>
 
-      <footer className="launch-credit">
-        <span>sprite-lite</span>
-        <a href={launchPath('usage')}>Usage</a>
-      </footer>
+      <LaunchNav current="cast" />
     </div>
   )
 }

@@ -220,6 +220,9 @@ export function Demo() {
           <a className="demo-text-link" href={launchPath('cast')}>
             Cast
           </a>
+          <a className="demo-text-link" href={launchPath('led')}>
+            LED
+          </a>
         </div>
       </header>
 

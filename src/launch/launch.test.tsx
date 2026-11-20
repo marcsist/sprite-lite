@@ -1,6 +1,7 @@
 import { cleanup, render } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { LaunchCast } from './cast'
+import { LaunchLed } from './led'
 import { LaunchUsage } from './usage'
 
 function mockMatchMedia(matches: boolean) {
@@ -49,6 +50,8 @@ describe('launch usage', () => {
 
     const thinking = marks.filter((el) => (el.getAttribute('aria-label') ?? '').startsWith('Thinking'))
     expect(thinking.map((el) => el.getAttribute('aria-label'))).toEqual(['Thinking: Face'])
+    expect(thinking[0]?.getAttribute('width')).toBe('22')
+    expect(container.querySelector('a[href$="/launch/led"]')).toBeTruthy()
   })
 })
 
@@ -76,5 +79,29 @@ describe('launch cast', () => {
       expect(el.getAttribute('role')).toBe('img')
       expect(el.getAttribute('tabindex')).toBe('-1')
     }
+    expect(container.querySelector('.cast-dek')).toBeNull()
+    expect(container.querySelector('.cast-names')).toBeNull()
+  })
+})
+
+describe('launch led', () => {
+  it('is a CRT scene of locked lite-brite sprites', () => {
+    const { container } = render(<LaunchLed />)
+
+    expect(container.querySelector('[data-launch="led"]')).toBeTruthy()
+    const thinking = sprites(container).filter((el) =>
+      (el.getAttribute('aria-label') ?? '').startsWith('Thinking')
+    )
+    expect(thinking.map((el) => el.getAttribute('aria-label'))).toEqual([
+      'Thinking: Rain',
+      'Thinking: Face',
+      'Thinking: Invader',
+    ])
+    for (const el of thinking) {
+      expect(el.getAttribute('role')).toBe('img')
+      expect(el.getAttribute('tabindex')).toBe('-1')
+      expect(el.querySelector('circle')).toBeTruthy()
+    }
+    expect(container.querySelector('a[href$="/launch/cast"]')).toBeTruthy()
   })
 })

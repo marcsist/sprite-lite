@@ -21,6 +21,12 @@
   pointer-events: none;
 }
 
+.launch-credit nav {
+  display: flex;
+  gap: 16px;
+  pointer-events: auto;
+}
+
 .launch-credit a {
   color: #6a6a6a;
   pointer-events: auto;
@@ -42,12 +48,13 @@
   display: grid;
   min-height: 100vh;
   place-items: center;
-  padding: 56px 32px 64px;
+  padding: 20px 24px 36px;
 }
 
 .usage-window {
   display: flex;
-  width: min(820px, 100%);
+  width: min(1120px, 100%);
+  height: min(640px, calc(100vh - 56px));
   flex-direction: column;
   overflow: hidden;
   border: 1px solid #262626;
@@ -130,11 +137,11 @@
 
 .usage-mark {
   display: grid;
-  width: 28px;
-  height: 28px;
-  flex: 0 0 28px;
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
   place-items: center;
-  margin-top: -1px;
+  margin-top: 0;
 }
 
 .usage-agent-body {
@@ -180,7 +187,7 @@
   display: flex;
   height: 36px;
   align-items: center;
-  margin-top: 22px;
+  margin-top: auto;
   padding: 0 12px;
   border: 1px solid #2a2a2a;
   border-radius: 9px;
@@ -246,43 +253,13 @@
   padding: 88px 56px 72px 64px;
 }
 
-.cast-kicker {
-  margin: 0;
-  color: #7d7a72;
-  font-family: "JetBrains Mono", ui-monospace, monospace;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.16em;
-  line-height: 1;
-  text-transform: uppercase;
-}
-
 .cast-copy h1 {
-  margin: 16px 0 0;
+  margin: 0;
   color: #f4f1ea;
   font-size: 44px;
   font-weight: 500;
   letter-spacing: -0.038em;
   line-height: 1.02;
-}
-
-.cast-dek {
-  max-width: 30ch;
-  margin: 18px 0 0;
-  color: #8f8d86;
-  font-size: 15px;
-  font-weight: 400;
-  line-height: 1.5;
-  letter-spacing: -0.011em;
-}
-
-.cast-names {
-  max-width: 34ch;
-  margin: 28px 0 0;
-  color: #625f58;
-  font-family: "JetBrains Mono", ui-monospace, monospace;
-  font-size: 11px;
-  line-height: 1.65;
 }
 
 .cast-room {
@@ -385,10 +362,109 @@
   .cast-room { height: 460px; }
 }
 
+/* LED — a CRT, lite-brite dots */
+
+.led-stage {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  padding: 28px 24px 48px;
+  background:
+    radial-gradient(ellipse at 50% 42%, rgba(90, 160, 50, 0.08), transparent 46%),
+    #050605;
+}
+
+.crt {
+  width: min(980px, 100%);
+  padding: 22px 22px 16px;
+  border: 1px solid #2a2c28;
+  border-radius: 28px 28px 18px 18px;
+  background: linear-gradient(180deg, #1c1e1a 0%, #121411 100%);
+  box-shadow:
+    0 0 0 1px #0a0a0a,
+    0 28px 70px rgba(0, 0, 0, 0.55),
+    0 0 90px rgba(120, 220, 60, 0.08);
+}
+
+.crt-glass {
+  position: relative;
+  height: 520px;
+  overflow: hidden;
+  border-radius: 18px;
+  background: #07140c;
+  box-shadow:
+    inset 0 0 90px rgba(0, 0, 0, 0.55),
+    inset 0 0 18px rgba(170, 255, 110, 0.06);
+}
+
+.crt-picture {
+  position: absolute;
+  inset: 0;
+}
+
+.crt-led {
+  position: absolute;
+  line-height: 0;
+  filter: drop-shadow(0 0 3px rgba(200, 255, 110, 0.7));
+}
+
+.crt-rain { top: 26px; right: 40px; }
+.crt-face { top: 96px; left: 132px; }
+.crt-invader { right: 52px; bottom: 28px; }
+
+.crt-scan,
+.crt-glare {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.crt-scan {
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0 2px,
+    rgba(0, 0, 0, 0.14) 2px 3px
+  );
+  animation: crt-flicker 7s linear infinite;
+}
+
+.crt-glare {
+  background:
+    radial-gradient(ellipse at 50% 40%, transparent 42%, rgba(0, 0, 0, 0.45) 100%),
+    linear-gradient(115deg, rgba(255, 255, 255, 0.05), transparent 28%);
+}
+
+.crt-chin {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 8px 2px 6px;
+  color: #6d7268;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+}
+
+.crt-power {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #b6ff6a;
+  box-shadow: 0 0 8px rgba(182, 255, 106, 0.85);
+}
+
+@keyframes crt-flicker {
+  0%, 92%, 100% { opacity: 1; }
+  93% { opacity: 0.82; }
+  94.5% { opacity: 1; }
+  97% { opacity: 0.9; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .usage-status-label,
   .cast-firefly,
-  .cast-ghost {
+  .cast-ghost,
+  .crt-scan {
     animation: none;
   }
 }

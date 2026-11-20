@@ -1,4 +1,4 @@
-export type LaunchRoute = 'usage' | 'cast'
+export type LaunchRoute = 'usage' | 'cast' | 'led'
 
 function basePath(): string {
   return import.meta.env.BASE_URL.replace(/\/$/, '')
@@ -14,5 +14,6 @@ export function currentLaunch(): LaunchRoute | null {
   if (base && path.startsWith(base)) path = path.slice(base.length)
   if (path === '/launch/usage') return 'usage'
   if (path === '/launch/cast') return 'cast'
+  if (path === '/launch/led') return 'led'
   return null
 }

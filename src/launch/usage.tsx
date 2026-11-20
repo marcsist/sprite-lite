@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { StatusSprite } from '../StatusSprite'
 import { ThinkingSprite } from '../ThinkingSprite'
 import type { StatusVariant } from '../status'
-import { launchPath } from './routes'
+import { LaunchNav } from './nav'
 import { usePrefersReducedMotion } from './reduced'
 import './launch.css'
 
@@ -92,7 +92,7 @@ export function LaunchUsage() {
                 <div className="usage-mark" aria-hidden="true">
                   <ThinkingSprite
                     variant="Face"
-                    size={28}
+                    size={22}
                     speed={140}
                     shape="square"
                     color={LED[0]}
@@ -151,10 +151,7 @@ export function LaunchUsage() {
         </section>
       </main>
 
-      <footer className="launch-credit">
-        <span>sprite-lite</span>
-        <a href={launchPath('cast')}>Cast</a>
-      </footer>
+      <LaunchNav current="usage" />
     </div>
   )
 }
