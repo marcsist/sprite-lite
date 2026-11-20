@@ -11,6 +11,7 @@ import {
   THINKING_DEFAULTS,
   WRITE_DEFAULTS,
 } from './demo-snippet'
+import { launchPath } from './launch/routes'
 import './demo.css'
 
 const ALL_NAMES = VARIANTS.map((v) => v.name)
@@ -212,6 +213,12 @@ export function Demo() {
             onMouseLeave={(e) => (e.currentTarget.style.color = '#555')}
           >
             GitHub ↗
+          </a>
+          <a className="demo-text-link" href={launchPath('usage')}>
+            Usage
+          </a>
+          <a className="demo-text-link" href={launchPath('cast')}>
+            Cast
           </a>
         </div>
       </header>

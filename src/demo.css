@@ -6,6 +6,16 @@
 
 .brand-mark { color: #dfff55; }
 
+.demo-text-link {
+  color: #555;
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.demo-text-link:hover { color: #aaa; }
+.demo-text-link:focus-visible { outline: 2px solid #dfff55; outline-offset: 2px; }
+
 .examples {
   margin-top: 4rem;
   padding-top: 2rem;
